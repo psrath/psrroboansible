@@ -1,0 +1,5 @@
+default:
+    base_url: https://${orch_ip}:8443/orchestrator
+    orch_admin: administrator
+    orch_pwd: Avocado_protect@20
+    auth: Basic YW5ndWxhci11aTphbmd1bGFyLXNlY3JldA==

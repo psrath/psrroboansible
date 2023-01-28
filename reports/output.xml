@@ -1,0 +1,1877 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<robot generator="Robot 4.1.3 (Python 3.8.10 on linux)" generated="20221021 12:51:07.119" rpa="false" schemaversion="2">
+<suite id="s1" name="Local-Test" source="/mnt/d/automation_avocado/testautomation/suites/local-test.robot">
+<kw name="Run Setup Only Once" library="pabot.PabotLib" type="SETUP">
+<arg>Environmnet Setup</arg>
+<arg>${${APP_OS}}</arg>
+<arg>${${PROXMOX}}</arg>
+<doc>Runs a keyword only once at the first possible moment when
+an execution has gone through this step.
+[https://pabot.org/PabotLib.html?ref=log#run-setup-only-once|Open online docs.]</doc>
+<kw name="Environmnet Setup" library="orch-api-keywords">
+<arg>{'osType': 'Linux', 'osName': 'RHEL', 'osVersion': '7', 'av_domain': 'tomcat', 'av_subdom': 'sub_tomcat', 'image': {'vm': 'base-tomcat9-rhel7', 'ct': 'dockerimage'}, 'plugin_cleanup_dir': 'rhel', 'plugin_installer_dir': 'centos7', 'apps': {'tomcat': {'process_name': 'java', 'processes': 2, 'systemd_service': 'tomcat9', 'proto': 'http', 'port': '8080', 'endpoint': '/', 'type': 'web', 'warriors': {'config': '/opt/tomcat/webapps/warriors/WEB-INF/database.properties', 'endpoint': '/warriors/login.jsp?txtusername=admin&amp;txtpass=admin', 'uname': 'admin', 'pwd': 'admin'}, 'struts': {'config': '/opt/tomcat/webapps/strutsapp/WEB-INF/classes/database.properties'}}}, 'default_app': 'tomcat', 'ansible_user': 'avocado', 'ansible_ssh_private_key_file': '../env/ssh_keys/key-connect-to-proxmox16', 'avocado_user': 'root', 'avocado_pwd': 'Avocado@2020', 'ansible_ssh_extra_args': '-o UserKnownHostsFile=/dev/null'}</arg>
+<arg>{'host': '192.168.101.16', 'ansible_user': 'root', 'ansible_ssh_pass': 'avcd@95135', 'ansible_ssh_host': '192.168.101.16', 'api_user': 'root@pam', 'pve_password': 'avcd@95135', 'pve_node': 'avcd-proxmox-16', 'default_proxmox_node': 'avcd-proxmox-16', 'vm_ip': 'static', 'vm_ips': ['192.168.102.201', '192.168.102.202', '192.168.102.203', '192.168.102.204', '192.168.102.205', '192.168.102.206', '192.168.102.207', '192.168.102.208', '192.168.102.209', '192.168.102.210', '192.168.102.211', '192.168.102.212', '192.168.102.213', '192.168.102.214'], 'vm_ips_windows': ['192.168.102.232', '192.168.102.233', '192.168.102.234', '192.168.102.235'], 'ipconfig': {'params': {'netmask': 22, 'vmbr': 0, 'gateway': '192.168.100.254', 'dnsservers': '8.8.8.8', 'win_domain_controller_ip': '192.168.102.229'}}}</arg>
+<kw name="Log" library="BuiltIn">
+<arg>${app_os}</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20221021 12:51:09.406" level="INFO">{'osType': 'Linux', 'osName': 'RHEL', 'osVersion': '7', 'av_domain': 'tomcat', 'av_subdom': 'sub_tomcat', 'image': {'vm': 'base-tomcat9-rhel7', 'ct': 'dockerimage'}, 'plugin_cleanup_dir': 'rhel', 'plugin_installer_dir': 'centos7', 'apps': {'tomcat': {'process_name': 'java', 'processes': 2, 'systemd_service': 'tomcat9', 'proto': 'http', 'port': '8080', 'endpoint': '/', 'type': 'web', 'warriors': {'config': '/opt/tomcat/webapps/warriors/WEB-INF/database.properties', 'endpoint': '/warriors/login.jsp?txtusername=admin&amp;txtpass=admin', 'uname': 'admin', 'pwd': 'admin'}, 'struts': {'config': '/opt/tomcat/webapps/strutsapp/WEB-INF/classes/database.properties'}}}, 'default_app': 'tomcat', 'ansible_user': 'avocado', 'ansible_ssh_private_key_file': '../env/ssh_keys/key-connect-to-proxmox16', 'avocado_user': 'root', 'avocado_pwd': 'Avocado@2020', 'ansible_ssh_extra_args': '-o UserKnownHostsFile=/dev/null'}</msg>
+<status status="PASS" starttime="20221021 12:51:09.406" endtime="20221021 12:51:09.406"/>
+</kw>
+<kw name="Evaluate" library="BuiltIn">
+<var>${value}</var>
+<arg>${testenv}.get('${PREFIX}', ${EMPTY})</arg>
+<doc>Evaluates the given expression in Python and returns the result.</doc>
+<msg timestamp="20221021 12:51:09.407" level="INFO">${value} = {'vm_ips': ['192.168.102.140']}</msg>
+<status status="PASS" starttime="20221021 12:51:09.407" endtime="20221021 12:51:09.407"/>
+</kw>
+<if>
+<branch type="IF" condition="${value} == None">
+<kw name="Fatal Error" library="BuiltIn">
+<arg>msg=Unable to find test environment '${PREFIX}' configuration, Exiting...</arg>
+<doc>Stops the whole test execution.</doc>
+<status status="NOT RUN" starttime="20221021 12:51:09.408" endtime="20221021 12:51:09.408"/>
+</kw>
+<status status="NOT RUN" starttime="20221021 12:51:09.408" endtime="20221021 12:51:09.408"/>
+</branch>
+<status status="PASS" starttime="20221021 12:51:09.407" endtime="20221021 12:51:09.408"/>
+</if>
+<kw name="Set Parallel Value For Key" library="pabot.PabotLib">
+<arg>inventory</arg>
+<arg>${used_ips}</arg>
+<doc>Set a globally available key and value that can be accessed
+from all the pabot processes.
+[https://pabot.org/PabotLib.html?ref=log#set-parallel-value-for-key|Open online docs.]</doc>
+<status status="PASS" starttime="20221021 12:51:09.408" endtime="20221021 12:51:09.410"/>
+</kw>
+<kw name="Set Parallel Value For Key" library="pabot.PabotLib">
+<arg>ips_in_deploy</arg>
+<arg>${ips_in_deploy}</arg>
+<doc>Set a globally available key and value that can be accessed
+from all the pabot processes.
+[https://pabot.org/PabotLib.html?ref=log#set-parallel-value-for-key|Open online docs.]</doc>
+<status status="PASS" starttime="20221021 12:51:09.410" endtime="20221021 12:51:09.412"/>
+</kw>
+<kw name="Set Parallel Value For Key" library="pabot.PabotLib">
+<arg>newid</arg>
+<arg>5000</arg>
+<doc>Set a globally available key and value that can be accessed
+from all the pabot processes.
+[https://pabot.org/PabotLib.html?ref=log#set-parallel-value-for-key|Open online docs.]</doc>
+<status status="PASS" starttime="20221021 12:51:09.412" endtime="20221021 12:51:09.414"/>
+</kw>
+<kw name="Set Parallel Value For Key" library="pabot.PabotLib">
+<arg>instance_cnt</arg>
+<arg>${instance_cnt}</arg>
+<doc>Set a globally available key and value that can be accessed
+from all the pabot processes.
+[https://pabot.org/PabotLib.html?ref=log#set-parallel-value-for-key|Open online docs.]</doc>
+<status status="PASS" starttime="20221021 12:51:09.414" endtime="20221021 12:51:09.416"/>
+</kw>
+<kw name="Set Parallel Value For Key" library="pabot.PabotLib">
+<arg>build_num</arg>
+<arg>${BUILD_NUM}</arg>
+<doc>Set a globally available key and value that can be accessed
+from all the pabot processes.
+[https://pabot.org/PabotLib.html?ref=log#set-parallel-value-for-key|Open online docs.]</doc>
+<status status="PASS" starttime="20221021 12:51:09.417" endtime="20221021 12:51:09.420"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>Using Build System = ${BUILD_SYSTEM}</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20221021 12:51:09.421" level="INFO">Using Build System = new</msg>
+<status status="PASS" starttime="20221021 12:51:09.420" endtime="20221021 12:51:09.421"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>Using MAJOR_RELEASE = ${MAJOR_RELEASE}</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20221021 12:51:09.421" level="INFO">Using MAJOR_RELEASE = 2.5</msg>
+<status status="PASS" starttime="20221021 12:51:09.421" endtime="20221021 12:51:09.421"/>
+</kw>
+<kw name="Download Plugins Build" library="AvocadoBuildUtils">
+<arg>${BUILD_SYSTEM}</arg>
+<msg timestamp="20221021 12:51:09.422" level="INFO">Argument types are:
+&lt;class 'robot.utils.dotdict.DotDict'&gt;
+&lt;type 'unicode'&gt;</msg>
+<msg timestamp="20221021 12:51:11.878" level="INFO">${BUILD_NUM} = 17</msg>
+<msg timestamp="20221021 12:51:11.893" level="INFO">Using major_release :  Release_2_5
+{'url': 'http://192.168.100.18:8080/', 'user': 'admin', 'pwd': 'Avcd@2021', 'job': {'Release_2_5': 'adpl-3.0', 'Release_master': 'adpl-master'}, 'download_dir': 'pluginpackage', 'params': {'MAJOR_MINOR_VERSION': '2.5'}, 'artifacts': [{'os': 'centos7', 'foldername': 'automation/compile/bin/centos7/pkgrepo/', 'packageExtn': 'rpm'}, {'os': 'ol6', 'foldername': 'automation/compile/bin/ol6/pkgrepo/', 'packageExtn': 'rpm'}, {'os': 'ubuntu16', 'foldername': 'automation/compile/bin/ubuntu16/pkgrepo/', 'packageExtn': 'deb'}, {'os': 'ubuntu18', 'foldername': 'automation/compile/bin/ubuntu18/pkgrepo/', 'packageExtn': 'deb'}, {'os': 'rhel8', 'foldername': 'automation/compile/bin/rhel8/pkgrepo/', 'packageExtn': 'rpm'}, {'os': None, 'foldername': 'packager/', 'packageExtn': 'sh'}]}
+http://192.168.100.18:8080/
+admin
+Avcd@2021
+Connected to Jenkins version 2.361.1 
+{'_class': 'hudson.model.FreeStyleBuild', 'actions': [{'_class': 'hudson.model.ParametersAction', 'parameters': [{'_class': 'hudson.model.StringParameterValue', 'name': 'MAJOR_MINOR_VERSION', 'value': '3.0'}]}, {'_class': 'hudson.model.CauseAction', 'causes': [{'_class': 'hudson.model.Cause$UserIdCause', 'shortDescription': 'Started by user Ashwini Jadhav', 'userId': 'ajadhav', 'userName': 'Ashwini Jadhav'}]}, {}, {'_class': 'hudson.plugins.git.util.BuildData', 'buildsByBranchName': {'refs/remotes/origin/master': {'_class': 'hudson.plugins.git.util.Build', 'buildNumber': 17, 'buildResult': None, 'marked': {'SHA1': 'df0d625e2e929873f743050289747480c3dbaee1', 'branch': [{'SHA1': 'df0d625e2e929873f743050289747480c3dbaee1', 'name': 'refs/remotes/origin/master'}]}, 'revision': {'SHA1': 'df0d625e2e929873f743050289747480c3dbaee1', 'branch': [{'SHA1': 'df0d625e2e929873f743050289747480c3dbaee1', 'name': 'refs/remotes/origin/master'}]}}}, 'lastBuiltRevision': {'SHA1': 'df0d625e2e929873f743050289747480c3dbaee1', 'branch': [{'SHA1': 'df0d625e2e929873f743050289747480c3dbaee1', 'name': 'refs/remotes/origin/master'}]}, 'remoteUrls': ['http://192.168.100.19:8008/avocado/adpl.git'], 'scmName': ''}, {}, {}, {'_class': 'org.jenkinsci.plugins.displayurlapi.actions.RunDisplayAction'}], 'artifacts': [{'displayPath': None, 'fileName': 'install_log', 'relativePath': 'automation/compile/bin/alpine/install_log'}, {'displayPath': None, 'fileName': 'AVCDadpl-3.0.17-r0.apk', 'relativePath': 'automation/compile/bin/alpine/pkgrepo/AVCDadpl-3.0.17-r0.apk'}, {'displayPath': None, 'fileName': 'install_log', 'relativePath': 'automation/compile/bin/centos7/install_log'}, {'displayPath': None, 'fileName': 'AVCDadpl-3.0.17.rhel7.x86_64.rpm', 'relativePath': 'automation/compile/bin/centos7/pkgrepo/AVCDadpl-3.0.17.rhel7.x86_64.rpm'}, {'displayPath': None, 'fileName': 'md5_checksums', 'relativePath': 'automation/compile/bin/centos7/pkgrepo/md5_checksums'}, {'displayPath': None, 'fileName': 'install_log', 'relativePath': 'automation/compile/bin/debian10/install_log'}, {'displayPath': None, 'fileName': 'avcdadpl_3.0.17.debian10_amd64.deb', 'relativePath': 'automation/compile/bin/debian10/pkgrepo/avcdadpl_3.0.17.debian10_amd64.deb'}, {'displayPath': None, 'fileName': 'md5_checksums', 'relativePath': 'automation/compile/bin/debian10/pkgrepo/md5_checksums'}, {'displayPath': None, 'fileName': 'install_log', 'relativePath': 'automation/compile/bin/ol6/install_log'}, {'displayPath': None, 'fileName': 'AVCDadpl-3.0.17.ol6.x86_64.rpm', 'relativePath': 'automation/compile/bin/ol6/pkgrepo/AVCDadpl-3.0.17.ol6.x86_64.rpm'}, {'displayPath': None, 'fileName': 'md5_checksums', 'relativePath': 'automation/compile/bin/ol6/pkgrepo/md5_checksums'}, {'displayPath': None, 'fileName': 'install_log', 'relativePath': 'automation/compile/bin/rhel8/install_log'}, {'displayPath': None, 'fileName': 'AVCDadpl-3.0.17.rhel8.x86_64.rpm', 'relativePath': 'automation/compile/bin/rhel8/pkgrepo/AVCDadpl-3.0.17.rhel8.x86_64.rpm'}, {'displayPath': None, 'fileName': 'md5_checksums', 'relativePath': 'automation/compile/bin/rhel8/pkgrepo/md5_checksums'}, {'displayPath': None, 'fileName': 'install_log', 'relativePath': 'automation/compile/bin/sunos11/install_log'}, {'displayPath': None, 'fileName': 'AVCDadpl_3.0.17.sparc.11.4.pkg', 'relativePath': 'automation/compile/bin/sunos11/pkgrepo/AVCDadpl_3.0.17.sparc.11.4.pkg'}, {'displayPath': None, 'fileName': 'install_log', 'relativePath': 'automation/compile/bin/ubuntu16/install_log'}, {'displayPath': None, 'fileName': 'avcdadpl_3.0.17.ubuntu16_amd64.deb', 'relativePath': 'automation/compile/bin/ubuntu16/pkgrepo/avcdadpl_3.0.17.ubuntu16_amd64.deb'}, {'displayPath': None, 'fileName': 'md5_checksums', 'relativePath': 'automation/compile/bin/ubuntu16/pkgrepo/md5_checksums'}, {'displayPath': None, 'fileName': 'install_log', 'relativePath': 'automation/compile/bin/ubuntu18/install_log'}, {'displayPath': None, 'fileName': 'avcdadpl_3.0.17.ubuntu18_amd64.deb', 'relativePath': 'automation/compile/bin/ubuntu18/pkgrepo/avcdadpl_3.0.17.ubuntu18_amd64.deb'}, {'displayPath': None, 'fileName': 'md5_checksums', 'relativePath': 'automation/compile/bin/ubuntu18/pkgrepo/md5_checksums'}, {'displayPath': None, 'fileName': 'alpine_log', 'relativePath': 'automation/compile/logs/alpine_log'}, {'displayPath': None, 'fileName': 'centos7_log', 'relativePath': 'automation/compile/logs/centos7_log'}, {'displayPath': None, 'fileName': 'debian10_log', 'relativePath': 'automation/compile/logs/debian10_log'}, {'displayPath': None, 'fileName': 'ol6_log', 'relativePath': 'automation/compile/logs/ol6_log'}, {'displayPath': None, 'fileName': 'rhel8_log', 'relativePath': 'automation/compile/logs/rhel8_log'}, {'displayPath': None, 'fileName': 'sunos11_log', 'relativePath': 'automation/compile/logs/sunos11_log'}, {'displayPath': None, 'fileName': 'ubuntu16_log', 'relativePath': 'automation/compile/logs/ubuntu16_log'}, {'displayPath': None, 'fileName': 'ubuntu18_log', 'relativePath': 'automation/compile/logs/ubuntu18_log'}, {'displayPath': None, 'fileName': 'install_adpl.sh', 'relativePath': 'packager/install_adpl.sh'}], 'building': False, 'description': None, 'displayName': '#17', 'duration': 1805244, 'estimatedDuration': 2014737, 'executor': None, 'fullDisplayName': 'adpl-3.0 #17', 'id': '17', 'keepLog': False, 'number': 17, 'queueId': 60, 'result': 'SUCCESS', 'timestamp': 1666246880427, 'url': 'http://192.168.100.18:8080/job/adpl-3.0/17/', 'builtOn': '', 'changeSet': {'_class': 'hudson.plugins.git.GitChangeSetList', 'items': [], 'kind': 'git'}, 'culprits': []}
+Fetching build artifacts from http://192.168.100.18:8080/job/adpl-3.0/17/
+[{'os': 'centos7', 'foldername': 'automation/compile/bin/centos7/pkgrepo/', 'packageExtn': 'rpm'}, {'os': 'ol6', 'foldername': 'automation/compile/bin/ol6/pkgrepo/', 'packageExtn': 'rpm'}, {'os': 'ubuntu16', 'foldername': 'automation/compile/bin/ubuntu16/pkgrepo/', 'packageExtn': 'deb'}, {'os': 'ubuntu18', 'foldername': 'automation/compile/bin/ubuntu18/pkgrepo/', 'packageExtn': 'deb'}, {'os': 'rhel8', 'foldername': 'automation/compile/bin/rhel8/pkgrepo/', 'packageExtn': 'rpm'}, {'os': None, 'foldername': 'packager/', 'packageExtn': 'sh'}]
+[{'displayPath': None, 'fileName': 'install_log', 'relativePath': 'automation/compile/bin/alpine/install_log'}, {'displayPath': None, 'fileName': 'AVCDadpl-3.0.17-r0.apk', 'relativePath': 'automation/compile/bin/alpine/pkgrepo/AVCDadpl-3.0.17-r0.apk'}, {'displayPath': None, 'fileName': 'install_log', 'relativePath': 'automation/compile/bin/centos7/install_log'}, {'displayPath': None, 'fileName': 'AVCDadpl-3.0.17.rhel7.x86_64.rpm', 'relativePath': 'automation/compile/bin/centos7/pkgrepo/AVCDadpl-3.0.17.rhel7.x86_64.rpm'}, {'displayPath': None, 'fileName': 'md5_checksums', 'relativePath': 'automation/compile/bin/centos7/pkgrepo/md5_checksums'}, {'displayPath': None, 'fileName': 'install_log', 'relativePath': 'automation/compile/bin/debian10/install_log'}, {'displayPath': None, 'fileName': 'avcdadpl_3.0.17.debian10_amd64.deb', 'relativePath': 'automation/compile/bin/debian10/pkgrepo/avcdadpl_3.0.17.debian10_amd64.deb'}, {'displayPath': None, 'fileName': 'md5_checksums', 'relativePath': 'automation/compile/bin/debian10/pkgrepo/md5_checksums'}, {'displayPath': None, 'fileName': 'install_log', 'relativePath': 'automation/compile/bin/ol6/install_log'}, {'displayPath': None, 'fileName': 'AVCDadpl-3.0.17.ol6.x86_64.rpm', 'relativePath': 'automation/compile/bin/ol6/pkgrepo/AVCDadpl-3.0.17.ol6.x86_64.rpm'}, {'displayPath': None, 'fileName': 'md5_checksums', 'relativePath': 'automation/compile/bin/ol6/pkgrepo/md5_checksums'}, {'displayPath': None, 'fileName': 'install_log', 'relativePath': 'automation/compile/bin/rhel8/install_log'}, {'displayPath': None, 'fileName': 'AVCDadpl-3.0.17.rhel8.x86_64.rpm', 'relativePath': 'automation/compile/bin/rhel8/pkgrepo/AVCDadpl-3.0.17.rhel8.x86_64.rpm'}, {'displayPath': None, 'fileName': 'md5_checksums', 'relativePath': 'automation/compile/bin/rhel8/pkgrepo/md5_checksums'}, {'displayPath': None, 'fileName': 'install_log', 'relativePath': 'automation/compile/bin/sunos11/install_log'}, {'displayPath': None, 'fileName': 'AVCDadpl_3.0.17.sparc.11.4.pkg', 'relativePath': 'automation/compile/bin/sunos11/pkgrepo/AVCDadpl_3.0.17.sparc.11.4.pkg'}, {'displayPath': None, 'fileName': 'install_log', 'relativePath': 'automation/compile/bin/ubuntu16/install_log'}, {'displayPath': None, 'fileName': 'avcdadpl_3.0.17.ubuntu16_amd64.deb', 'relativePath': 'automation/compile/bin/ubuntu16/pkgrepo/avcdadpl_3.0.17.ubuntu16_amd64.deb'}, {'displayPath': None, 'fileName': 'md5_checksums', 'relativePath': 'automation/compile/bin/ubuntu16/pkgrepo/md5_checksums'}, {'displayPath': None, 'fileName': 'install_log', 'relativePath': 'automation/compile/bin/ubuntu18/install_log'}, {'displayPath': None, 'fileName': 'avcdadpl_3.0.17.ubuntu18_amd64.deb', 'relativePath': 'automation/compile/bin/ubuntu18/pkgrepo/avcdadpl_3.0.17.ubuntu18_amd64.deb'}, {'displayPath': None, 'fileName': 'md5_checksums', 'relativePath': 'automation/compile/bin/ubuntu18/pkgrepo/md5_checksums'}, {'displayPath': None, 'fileName': 'alpine_log', 'relativePath': 'automation/compile/logs/alpine_log'}, {'displayPath': None, 'fileName': 'centos7_log', 'relativePath': 'automation/compile/logs/centos7_log'}, {'displayPath': None, 'fileName': 'debian10_log', 'relativePath': 'automation/compile/logs/debian10_log'}, {'displayPath': None, 'fileName': 'ol6_log', 'relativePath': 'automation/compile/logs/ol6_log'}, {'displayPath': None, 'fileName': 'rhel8_log', 'relativePath': 'automation/compile/logs/rhel8_log'}, {'displayPath': None, 'fileName': 'sunos11_log', 'relativePath': 'automation/compile/logs/sunos11_log'}, {'displayPath': None, 'fileName': 'ubuntu16_log', 'relativePath': 'automation/compile/logs/ubuntu16_log'}, {'displayPath': None, 'fileName': 'ubuntu18_log', 'relativePath': 'automation/compile/logs/ubuntu18_log'}, {'displayPath': None, 'fileName': 'install_adpl.sh', 'relativePath': 'packager/install_adpl.sh'}]
+Last successful build 17 already downloaded, will reuse</msg>
+<status status="PASS" starttime="20221021 12:51:09.421" endtime="20221021 12:51:11.894"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>Using Build ${BUILD_NUM}</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20221021 12:51:11.894" level="INFO">Using Build 17</msg>
+<status status="PASS" starttime="20221021 12:51:11.894" endtime="20221021 12:51:11.894"/>
+</kw>
+<if>
+<branch type="IF" condition="'${DEPLOY_ORCH}' != '${EMPTY}'">
+<kw name="Download Orchestrator Build" library="AvocadoBuildUtils">
+<arg>${ORCH_BUILD_NUM}</arg>
+<status status="NOT RUN" starttime="20221021 12:51:11.896" endtime="20221021 12:51:11.896"/>
+</kw>
+<kw name="Get Parallel Value For Key" library="pabot.PabotLib">
+<var>${ORCH_BUILD_NUM}</var>
+<arg>orch_build_num</arg>
+<doc>Get the value for a key. If there is no value for the key then empty
+string is returned.
+[https://pabot.org/PabotLib.html?ref=log#get-parallel-value-for-key|Open online docs.]</doc>
+<status status="NOT RUN" starttime="20221021 12:51:11.896" endtime="20221021 12:51:11.896"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>Using Orchestraor Build ${ORCH_BUILD_NUM}</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="NOT RUN" starttime="20221021 12:51:11.896" endtime="20221021 12:51:11.896"/>
+</kw>
+<status status="NOT RUN" starttime="20221021 12:51:11.895" endtime="20221021 12:51:11.896"/>
+</branch>
+<status status="PASS" starttime="20221021 12:51:11.895" endtime="20221021 12:51:11.896"/>
+</if>
+<kw name="Shutdown All Automation VMs And Remove Ipconfig On them" library="orch-api-keywords">
+<arg>${app_os}</arg>
+<arg>${proxmox_instance}</arg>
+<kw name="Create Dictionary" library="BuiltIn">
+<var>&amp;{dict1}</var>
+<arg>app_os=${app_os}</arg>
+<arg>proxmox=${proxmox_instance}</arg>
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<msg timestamp="20221021 12:51:11.898" level="INFO">&amp;{dict1} = { app_os={'osType': 'Linux', 'osName': 'RHEL', 'osVersion': '7', 'av_domain': 'tomcat', 'av_subdom': 'sub_tomcat', 'image': {'vm': 'base-tomcat9-rhel7', 'ct': 'dockerimage'}, 'plugin_cleanup_dir': 'rh...</msg>
+<status status="PASS" starttime="20221021 12:51:11.897" endtime="20221021 12:51:11.898"/>
+</kw>
+<kw name="Create Dictionary" library="BuiltIn">
+<var>&amp;{dict2}</var>
+<arg>${proxmox_instance.host}</arg>
+<arg>${dict1}</arg>
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<msg timestamp="20221021 12:51:11.899" level="INFO">&amp;{dict2} = { 192.168.101.16={'app_os': {'osType': 'Linux', 'osName': 'RHEL', 'osVersion': '7', 'av_domain': 'tomcat', 'av_subdom': 'sub_tomcat', 'image': {'vm': 'base-tomcat9-rhel7', 'ct': 'dockerimage'}, 'plugi...</msg>
+<status status="PASS" starttime="20221021 12:51:11.898" endtime="20221021 12:51:11.899"/>
+</kw>
+<kw name="Copy Dictionary" library="Collections">
+<var>${t_inv}</var>
+<arg>${inv}</arg>
+<arg>deepcopy=true</arg>
+<doc>Returns a copy of the given dictionary.</doc>
+<msg timestamp="20221021 12:51:11.899" level="INFO">${t_inv} = {'all': {'children': {'ungrouped': {'hosts': None}}}}</msg>
+<status status="PASS" starttime="20221021 12:51:11.899" endtime="20221021 12:51:11.900"/>
+</kw>
+<kw name="Set To Dictionary" library="Collections">
+<arg>${t_inv.all.children.ungrouped}</arg>
+<arg>hosts=${dict2}</arg>
+<doc>Adds the given ``key_value_pairs`` and ``items`` to the ``dictionary``.</doc>
+<status status="PASS" starttime="20221021 12:51:11.900" endtime="20221021 12:51:11.900"/>
+</kw>
+<kw name="Create Dictionary" library="BuiltIn">
+<var>${extra}</var>
+<arg>NAME_PREFIX=${PREFIX}</arg>
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<msg timestamp="20221021 12:51:11.901" level="INFO">${extra} = {'NAME_PREFIX': 'psr'}</msg>
+<status status="PASS" starttime="20221021 12:51:11.901" endtime="20221021 12:51:11.901"/>
+</kw>
+<kw name="Run Playbook On Proxmox" library="AvocadoAnsibleRunner">
+<arg>shutdown-all-auto-vms.yml</arg>
+<arg>inventory=${t_inv}</arg>
+<arg>extra=${extra}</arg>
+<doc>Triggering ansible playbook on proxmox.</doc>
+<msg timestamp="20221021 12:51:18.380" level="INFO">*DEBUG:1666336878379.958* {'all': {'children': {'ungrouped': {'hosts': {'192.168.101.16': {'app_os': {'osType': 'Linux', 'osName': 'RHEL', 'osVersion': '7', 'av_domain': 'tomcat', 'av_subdom': 'sub_tomcat', 'image': {'vm': 'base-tomcat9-rhel7', 'ct': 'dockerimage'}, 'plugin_cleanup_dir': 'rhel', 'plugin_installer_dir': 'centos7', 'apps': {'tomcat': {'process_name': 'java', 'processes': 2, 'systemd_service': 'tomcat9', 'proto': 'http', 'port': '8080', 'endpoint': '/', 'type': 'web', 'warriors': {'config': '/opt/tomcat/webapps/warriors/WEB-INF/database.properties', 'endpoint': '/warriors/login.jsp?txtusername=admin&amp;txtpass=admin', 'uname': 'admin', 'pwd': 'admin'}, 'struts': {'config': '/opt/tomcat/webapps/strutsapp/WEB-INF/classes/database.properties'}}}, 'default_app': 'tomcat', 'ansible_user': 'avocado', 'ansible_ssh_private_key_file': '../env/ssh_keys/key-connect-to-proxmox16', 'avocado_user': 'root', 'avocado_pwd': 'Avocado@2020', 'ansible_ssh_extra_args': '-o UserKnownHostsFile=/dev/null'}, 'proxmox': {'host': '192.168.101.16', 'ansible_user': 'root', 'ansible_ssh_pass': 'avcd@95135', 'ansible_ssh_host': '192.168.101.16', 'api_user': 'root@pam', 'pve_password': 'avcd@95135', 'pve_node': 'avcd-proxmox-16', 'default_proxmox_node': 'avcd-proxmox-16', 'vm_ip': 'static', 'vm_ips': ['192.168.102.201', '192.168.102.202', '192.168.102.203', '192.168.102.204', '192.168.102.205', '192.168.102.206', '192.168.102.207', '192.168.102.208', '192.168.102.209', '192.168.102.210', '192.168.102.211', '192.168.102.212', '192.168.102.213', '192.168.102.214'], 'vm_ips_windows': ['192.168.102.232', '192.168.102.233', '192.168.102.234', '192.168.102.235'], 'ipconfig': {'params': {'netmask': 22, 'vmbr': 0, 'gateway': '192.168.100.254', 'dnsservers': '8.8.8.8', 'win_domain_controller_ip': '192.168.102.229'}}}}}}}}}</msg>
+<msg timestamp="20221021 12:51:18.380" level="INFO">*DEBUG:1666336878380.3857* {'NAME_PREFIX': 'psr'}</msg>
+<msg timestamp="20221021 12:51:18.383" level="INFO">*DEBUG:1666336878383.035* 192.168.101.16</msg>
+<msg timestamp="20221021 12:51:18.383" level="INFO">*DEBUG:1666336878383.1824* {'app_os': {'osType': 'Linux', 'osName': 'RHEL', 'osVersion': '7', 'av_domain': 'tomcat', 'av_subdom': 'sub_tomcat', 'image': {'vm': 'base-tomcat9-rhel7', 'ct': 'dockerimage'}, 'plugin_cleanup_dir': 'rhel', 'plugin_installer_dir': 'centos7', 'apps': {'tomcat': {'process_name': 'java', 'processes': 2, 'systemd_service': 'tomcat9', 'proto': 'http', 'port': '8080', 'endpoint': '/', 'type': 'web', 'warriors': {'config': '/opt/tomcat/webapps/warriors/WEB-INF/database.properties', 'endpoint': '/warriors/login.jsp?txtusername=admin&amp;txtpass=admin', 'uname': 'admin', 'pwd': 'admin'}, 'struts': {'config': '/opt/tomcat/webapps/strutsapp/WEB-INF/classes/database.properties'}}}, 'default_app': 'tomcat', 'ansible_user': 'avocado', 'ansible_ssh_private_key_file': '../env/ssh_keys/key-connect-to-proxmox16', 'avocado_user': 'root', 'avocado_pwd': 'Avocado@2020', 'ansible_ssh_extra_args': '-o UserKnownHostsFile=/dev/null'}, 'proxmox': {'host': '192.168.101.16', 'ansible_user': 'root', 'ansible_ssh_pass': 'avcd@95135', 'ansible_ssh_host': '192.168.101.16', 'api_user': 'root@pam', 'pve_password': 'avcd@95135', 'pve_node': 'avcd-proxmox-16', 'default_proxmox_node': 'avcd-proxmox-16', 'vm_ip': 'static', 'vm_ips': ['192.168.102.201', '192.168.102.202', '192.168.102.203', '192.168.102.204', '192.168.102.205', '192.168.102.206', '192.168.102.207', '192.168.102.208', '192.168.102.209', '192.168.102.210', '192.168.102.211', '192.168.102.212', '192.168.102.213', '192.168.102.214'], 'vm_ips_windows': ['192.168.102.232', '192.168.102.233', '192.168.102.234', '192.168.102.235'], 'ipconfig': {'params': {'netmask': 22, 'vmbr': 0, 'gateway': '192.168.100.254', 'dnsservers': '8.8.8.8', 'win_domain_controller_ip': '192.168.102.229'}}}}</msg>
+<msg timestamp="20221021 12:51:18.383" level="INFO">Random Suffix generated = nstzzifnogxgdfr</msg>
+<msg timestamp="20221021 12:51:18.929" level="INFO">*INFO:1666336878929.0127* {'all': {'children': {'ungrouped': {'hosts': {'192.168.101.16': {'app_os': {'osType': 'Linux', 'osName': 'RHEL', 'osVersion': '7', 'av_domain': 'tomcat', 'av_subdom': 'sub_tomcat', 'image': {'vm': 'base-tomcat9-rhel7', 'ct': 'dockerimage'}, 'plugin_cleanup_dir': 'rhel', 'plugin_installer_dir': 'centos7', 'apps': {'tomcat': {'process_name': 'java', 'processes': 2, 'systemd_service': 'tomcat9', 'proto': 'http', 'port': '8080', 'endpoint': '/', 'type': 'web', 'warriors': {'config': '/opt/tomcat/webapps/warriors/WEB-INF/database.properties', 'endpoint': '/warriors/login.jsp?txtusername=admin&amp;txtpass=admin', 'uname': 'admin', 'pwd': 'admin'}, 'struts': {'config': '/opt/tomcat/webapps/strutsapp/WEB-INF/classes/database.properties'}}}, 'default_app': 'tomcat', 'ansible_user': 'avocado', 'ansible_ssh_private_key_file': '../env/ssh_keys/key-connect-to-proxmox16', 'avocado_user': 'root', 'avocado_pwd': 'Avocado@2020', 'ansible_ssh_extra_args': '-o UserKnownHostsFile=/dev/null'}, 'proxmox': {'host': '192.168.101.16', 'ansible_user': 'root', 'ansible_ssh_pass': 'avcd@95135', 'ansible_ssh_host': '192.168.101.16', 'api_user': 'root@pam', 'pve_password': 'avcd@95135', 'pve_node': 'avcd-proxmox-16', 'default_proxmox_node': 'avcd-proxmox-16', 'vm_ip': 'static', 'vm_ips': ['192.168.102.201', '192.168.102.202', '192.168.102.203', '192.168.102.204', '192.168.102.205', '192.168.102.206', '192.168.102.207', '192.168.102.208', '192.168.102.209', '192.168.102.210', '192.168.102.211', '192.168.102.212', '192.168.102.213', '192.168.102.214'], 'vm_ips_windows': ['192.168.102.232', '192.168.102.233', '192.168.102.234', '192.168.102.235'], 'ipconfig': {'params': {'netmask': 22, 'vmbr': 0, 'gateway': '192.168.100.254', 'dnsservers': '8.8.8.8', 'win_domain_controller_ip': '192.168.102.229'}}}, 'ansible_host': '192.168.101.16', 'ansible_user': 'root', 'ansible_ssh_pass': 'avcd@95135', 'ansible_ssh_host': '192.168.101.16'}}}}}}</msg>
+<msg timestamp="20221021 12:52:50.411" level="INFO">*INFO:1666336970411.161* status=successful: return code=0</msg>
+<msg timestamp="20221021 12:52:50.412" level="INFO">PLAY [all] *********************************************************************
+
+TASK [Get List of test Vms starting with prefix "psr"] *************************
+[1;35mce_appendices/interpreter_discovery.html for more information.[0m
+[0;33mchanged: [192.168.101.16][0m
+
+TASK [debug] *******************************************************************
+[0;32mok: [192.168.101.16] =&gt; {[0m
+[0;32m    "vm_list": {[0m
+[0;32m        "ansible_facts": {[0m
+[0;32m            "discovered_interpreter_python": "/usr/bin/python"[0m
+[0;32m        },[0m
+[0;32m        "changed": true,[0m
+[0;32m        "cmd": "qm list | grep \"psr\" | awk '{print $1}'",[0m
+[0;32m        "delta": "0:00:02.297537",[0m
+[0;32m        "end": "2022-10-21 00:21:37.487670",[0m
+[0;32m        "failed": false,[0m
+[0;32m        "rc": 0,[0m
+[0;32m        "start": "2022-10-21 00:21:35.190133",[0m
+[0;32m        "stderr": "",[0m
+[0;32m        "stderr_lines": [],[0m
+[0;32m        "stdout": "5001",[0m
+[0;32m        "stdout_lines": [[0m
+[0;32m            "5001"[0m
+[0;32m        ],[0m
+[0;32m        "warnings": [[0m
+[0;32m            "Platform linux on host 192.168.101.16 is using the discovered Python interpreter at /usr/bin/python, but future installation of another Python interpreter could change this. See https://docs.ansible.com/ansible/2.9/reference_appendices/interpreter_discovery.html for more information."[0m
+[0;32m        ][0m
+[0;32m    }[0m
+[0;32m}[0m
+
+TASK [Loop over all automation vms, stop them and remove ip config] ************
+[0;31mfailed: [192.168.101.16] (item=5001) =&gt; {"ansible_loop_var": "item", "changed": false, "item": "5001", "msg": "VM with vmid 5001 does not exist in cluster"}[0m
+[0;36m...ignoring[0m
+
+TASK [Loop over all automation vms, remove ip config] **************************
+[0;31mfailed: [192.168.101.16] (item=5001) =&gt; {"ansible_loop_var": "item", "changed": false, "item": "5001", "msg": "Unable to update vm None with vmid 5001=500 Internal Server Error: Configuration file 'nodes/avcd-proxmox-16/qemu-server/5001.conf' does not exist", "vmid": 5001}[0m
+[0;36m...ignoring[0m
+
+TASK [Get existing Vmids on the given proxmox] *********************************
+[0;33mchanged: [192.168.101.16][0m
+
+TASK [Remove first line from vmList.txt] ***************************************
+[1;35m[WARNING]: Consider using the replace, lineinfile or template module rather[0m
+[1;35mthan running 'sed'.  If you need to use command because replace, lineinfile or[0m
+[1;35mtemplate is insufficient you can add 'warn: false' to this command task or set[0m
+[1;35m'command_warnings=False' in ansible.cfg to get rid of this message.[0m
+[0;33mchanged: [192.168.101.16][0m
+
+TASK [Read vmList.txt] *********************************************************
+[0;33mchanged: [192.168.101.16][0m
+
+TASK [debug] *******************************************************************
+[0;32mok: [192.168.101.16] =&gt; {[0m
+[0;32m    "vmlist": {[0m
+[0;32m        "changed": true,[0m
+[0;32m        "cmd": "cat /tmp/vmList.txt",[0m
+[0;32m        "delta": "0:00:00.006283",[0m
+[0;32m        "end": "2022-10-21 00:22:22.420845",[0m
+[0;32m        "failed": false,[0m
+[0;32m        "rc": 0,[0m
+[0;32m        "start": "2022-10-21 00:22:22.414562",[0m
+[0;32m        "stderr": "",[0m
+[0;32m        "stderr_lines": [],[0m
+[0;32m        "stdout": "100\n101\n102\n103\n104\n106\n107\n108\n109\n110\n111\n112\n1001\n1002\n1003\n5006\n5020\n5021\n5022\n8011\n8012\n8013\n8014\n9000\n9003\n9004\n9005\n9007\n9008\n9010\n9013\n9014\n9015\n9016\n9018\n9019\n9020\n9024\n9025\n9029\n9500\n9501\n9502\n9503\n9504\n9505\n9506\n9507\n9508\n9509\n9510\n9511\n9512\n9513\n9514\n9515\n9516",[0m
+[0;32m        "stdout_lines": [[0m
+[0;32m            "100",[0m
+[0;32m            "101",[0m
+[0;32m            "102",[0m
+[0;32m            "103",[0m
+[0;32m            "104",[0m
+[0;32m            "106",[0m
+[0;32m            "107",[0m
+[0;32m            "108",[0m
+[0;32m            "109",[0m
+[0;32m            "110",[0m
+[0;32m            "111",[0m
+[0;32m            "112",[0m
+[0;32m            "1001",[0m
+[0;32m            "1002",[0m
+[0;32m            "1003",[0m
+[0;32m            "5006",[0m
+[0;32m            "5020",[0m
+[0;32m            "5021",[0m
+[0;32m            "5022",[0m
+[0;32m            "8011",[0m
+[0;32m            "8012",[0m
+[0;32m            "8013",[0m
+[0;32m            "8014",[0m
+[0;32m            "9000",[0m
+[0;32m            "9003",[0m
+[0;32m            "9004",[0m
+[0;32m            "9005",[0m
+[0;32m            "9007",[0m
+[0;32m            "9008",[0m
+[0;32m            "9010",[0m
+[0;32m            "9013",[0m
+[0;32m            "9014",[0m
+[0;32m            "9015",[0m
+[0;32m            "9016",[0m
+[0;32m            "9018",[0m
+[0;32m            "9019",[0m
+[0;32m            "9020",[0m
+[0;32m            "9024",[0m
+[0;32m            "9025",[0m
+[0;32m            "9029",[0m
+[0;32m            "9500",[0m
+[0;32m            "9501",[0m
+[0;32m            "9502",[0m
+[0;32m            "9503",[0m
+[0;32m            "9504",[0m
+[0;32m            "9505",[0m
+[0;32m            "9506",[0m
+[0;32m            "9507",[0m
+[0;32m            "9508",[0m
+[0;32m            "9509",[0m
+[0;32m            "9510",[0m
+[0;32m            "9511",[0m
+[0;32m            "9512",[0m
+[0;32m            "9513",[0m
+[0;32m            "9514",[0m
+[0;32m            "9515",[0m
+[0;32m            "9516"[0m
+[0;32m        ][0m
+[0;32m    }[0m
+[0;32m}[0m
+
+TASK [copy vmList.txt file from remote to local.] ******************************
+[0;32mok: [192.168.101.16][0m
+
+PLAY RECAP *********************************************************************
+[0;33m192.168.101.16[0m             : [0;32mok=9   [0m [0;33mchanged=4   [0m unreachable=0    failed=0    skipped=0    rescued=0    [1;35mignored=2   [0m</msg>
+<status status="PASS" starttime="20221021 12:51:11.901" endtime="20221021 12:52:50.413"/>
+</kw>
+<status status="PASS" starttime="20221021 12:51:11.896" endtime="20221021 12:52:50.413"/>
+</kw>
+<if>
+<branch type="IF" condition="'${DEPLOY_ORCH}' != '${EMPTY}'">
+<kw name="Deploy Orchestrator VM on proxmox" library="orch-api-keywords">
+<status status="NOT RUN" starttime="20221021 12:52:50.415" endtime="20221021 12:52:50.415"/>
+</kw>
+<kw name="Install Orchestrator" library="orch-api-keywords">
+<arg>${ORCH_BUILD_NUM}</arg>
+<status status="NOT RUN" starttime="20221021 12:52:50.416" endtime="20221021 12:52:50.416"/>
+</kw>
+<kw name="Set Global Variable" library="BuiltIn">
+<arg>${orch_ip}</arg>
+<arg>${ip}</arg>
+<doc>Makes a variable available globally in all tests and suites.</doc>
+<status status="NOT RUN" starttime="20221021 12:52:50.416" endtime="20221021 12:52:50.416"/>
+</kw>
+<kw name="Set Parallel Value For Key" library="pabot.PabotLib">
+<arg>orch_ip</arg>
+<arg>${ip}</arg>
+<doc>Set a globally available key and value that can be accessed
+from all the pabot processes.
+[https://pabot.org/PabotLib.html?ref=log#set-parallel-value-for-key|Open online docs.]</doc>
+<status status="NOT RUN" starttime="20221021 12:52:50.416" endtime="20221021 12:52:50.416"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>Using Orchestrator @ ${orch_ip}</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="NOT RUN" starttime="20221021 12:52:50.416" endtime="20221021 12:52:50.416"/>
+</kw>
+<kw name="Set Global Variable" library="BuiltIn">
+<arg>${base_url}</arg>
+<arg>https://${orch_ip}:8443/orchestrator</arg>
+<doc>Makes a variable available globally in all tests and suites.</doc>
+<status status="NOT RUN" starttime="20221021 12:52:50.417" endtime="20221021 12:52:50.417"/>
+</kw>
+<kw name="Set Parallel Value For Key" library="pabot.PabotLib">
+<arg>base_url</arg>
+<arg>${base_url}</arg>
+<doc>Set a globally available key and value that can be accessed
+from all the pabot processes.
+[https://pabot.org/PabotLib.html?ref=log#set-parallel-value-for-key|Open online docs.]</doc>
+<status status="NOT RUN" starttime="20221021 12:52:50.417" endtime="20221021 12:52:50.417"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>base_url=${base_url}</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="NOT RUN" starttime="20221021 12:52:50.417" endtime="20221021 12:52:50.417"/>
+</kw>
+<kw name="Login For First Time" library="AvocadoAutomation">
+<arg>administrator</arg>
+<arg>$ecure@Av19</arg>
+<arg>Avocado_protect@20</arg>
+<status status="NOT RUN" starttime="20221021 12:52:50.417" endtime="20221021 12:52:50.417"/>
+</kw>
+<kw name="Login Into Orchestrator using API" library="orch-api-keywords">
+<status status="NOT RUN" starttime="20221021 12:52:50.417" endtime="20221021 12:52:50.417"/>
+</kw>
+<kw name="Set Parallel Value For Key" library="pabot.PabotLib">
+<arg>orch_install_status</arg>
+<arg>${True}</arg>
+<doc>Set a globally available key and value that can be accessed
+from all the pabot processes.
+[https://pabot.org/PabotLib.html?ref=log#set-parallel-value-for-key|Open online docs.]</doc>
+<status status="NOT RUN" starttime="20221021 12:52:50.417" endtime="20221021 12:52:50.417"/>
+</kw>
+<status status="NOT RUN" starttime="20221021 12:52:50.415" endtime="20221021 12:52:50.418"/>
+</branch>
+<status status="PASS" starttime="20221021 12:52:50.414" endtime="20221021 12:52:50.418"/>
+</if>
+<status status="PASS" starttime="20221021 12:51:09.406" endtime="20221021 12:52:50.418"/>
+</kw>
+<status status="PASS" starttime="20221021 12:51:09.400" endtime="20221021 12:52:50.423"/>
+</kw>
+<test id="s1-t1" name="Deploy VM on Proxmox on avcd-proxmox-16">
+<kw name="Log" library="BuiltIn">
+<arg>${APP_OS}</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20221021 12:52:50.425" level="INFO">tomcat9_rhel7</msg>
+<status status="PASS" starttime="20221021 12:52:50.424" endtime="20221021 12:52:50.425"/>
+</kw>
+<kw name="Set Suite Variable" library="BuiltIn">
+<arg>${APP_OS_NAME}</arg>
+<arg>${APP_OS}</arg>
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<msg timestamp="20221021 12:52:50.426" level="INFO">${APP_OS_NAME} = tomcat9_rhel7</msg>
+<status status="PASS" starttime="20221021 12:52:50.425" endtime="20221021 12:52:50.426"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>${PROXMOX}</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20221021 12:52:50.427" level="INFO">proxmox16</msg>
+<status status="PASS" starttime="20221021 12:52:50.426" endtime="20221021 12:52:50.427"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>${PREFIX}</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20221021 12:52:50.427" level="INFO">psr</msg>
+<status status="PASS" starttime="20221021 12:52:50.427" endtime="20221021 12:52:50.427"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>Base Url = ${base_url}</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20221021 12:52:50.427" level="INFO">Base Url = https://192.168.102.131:8443/orchestrator</msg>
+<status status="PASS" starttime="20221021 12:52:50.427" endtime="20221021 12:52:50.427"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>Orch Ip = ${orch_ip}</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20221021 12:52:50.428" level="INFO">Orch Ip = 192.168.102.131</msg>
+<status status="PASS" starttime="20221021 12:52:50.428" endtime="20221021 12:52:50.428"/>
+</kw>
+<kw name="Get Parallel Value For Key" library="pabot.PabotLib">
+<var>${orche_ip}</var>
+<arg>orch_ip</arg>
+<doc>Get the value for a key. If there is no value for the key then empty
+string is returned.
+[https://pabot.org/PabotLib.html?ref=log#get-parallel-value-for-key|Open online docs.]</doc>
+<msg timestamp="20221021 12:52:50.430" level="INFO">${orche_ip} = </msg>
+<status status="PASS" starttime="20221021 12:52:50.428" endtime="20221021 12:52:50.430"/>
+</kw>
+<kw name="Get Parallel Value For Key" library="pabot.PabotLib">
+<var>${base_url}</var>
+<arg>base_url</arg>
+<doc>Get the value for a key. If there is no value for the key then empty
+string is returned.
+[https://pabot.org/PabotLib.html?ref=log#get-parallel-value-for-key|Open online docs.]</doc>
+<msg timestamp="20221021 12:52:50.433" level="INFO">${base_url} = </msg>
+<status status="PASS" starttime="20221021 12:52:50.430" endtime="20221021 12:52:50.433"/>
+</kw>
+<if>
+<branch type="IF" condition="'${orche_ip}' != '${EMPTY}'">
+<kw name="Set Suite Variable" library="BuiltIn">
+<arg>${orch_ip}</arg>
+<arg>${orche_ip}</arg>
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<status status="NOT RUN" starttime="20221021 12:52:50.434" endtime="20221021 12:52:50.434"/>
+</kw>
+<kw name="Set Suite Variable" library="BuiltIn">
+<arg>${base_url}</arg>
+<arg>${base_url}</arg>
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<status status="NOT RUN" starttime="20221021 12:52:50.434" endtime="20221021 12:52:50.435"/>
+</kw>
+<kw name="Set Variable" library="BuiltIn">
+<var>${orchestrator.ansible_ssh_host}</var>
+<arg>${orch_ip}</arg>
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<status status="NOT RUN" starttime="20221021 12:52:50.435" endtime="20221021 12:52:50.435"/>
+</kw>
+<kw name="Log Dictionary" library="Collections">
+<arg>${orchestrator}</arg>
+<doc>Logs the size and contents of the ``dictionary`` using given ``level``.</doc>
+<status status="NOT RUN" starttime="20221021 12:52:50.435" endtime="20221021 12:52:50.435"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>Base Url Now = ${base_url}</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="NOT RUN" starttime="20221021 12:52:50.435" endtime="20221021 12:52:50.435"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>Orch Ip Now = ${orch_ip}</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="NOT RUN" starttime="20221021 12:52:50.435" endtime="20221021 12:52:50.435"/>
+</kw>
+<status status="NOT RUN" starttime="20221021 12:52:50.434" endtime="20221021 12:52:50.435"/>
+</branch>
+<status status="PASS" starttime="20221021 12:52:50.433" endtime="20221021 12:52:50.435"/>
+</if>
+<kw name="Set Proxmox Ip List" library="AvocadoUtils">
+<arg>${${PROXMOX}}</arg>
+<arg>${testenv.${PREFIX}.vm_ips}</arg>
+<status status="PASS" starttime="20221021 12:52:50.436" endtime="20221021 12:52:50.437"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>${${proxmox}.vm_ips}</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20221021 12:52:50.438" level="INFO">['192.168.102.140']</msg>
+<status status="PASS" starttime="20221021 12:52:50.437" endtime="20221021 12:52:50.438"/>
+</kw>
+<kw name="Deploy VM on proxmox" library="orch-api-keywords">
+<var>${plugin}</var>
+<arg>${${APP_OS}}</arg>
+<arg>${${PROXMOX}}</arg>
+<kw name="Log To Console" library="BuiltIn">
+<arg>Inside keyword</arg>
+<arg>stream=STDOUT</arg>
+<arg>no_newline=False</arg>
+<doc>Logs the given message to the console.</doc>
+<status status="PASS" starttime="20221021 12:52:50.439" endtime="20221021 12:52:50.439"/>
+</kw>
+<kw name="Create Dictionary" library="BuiltIn">
+<var>&amp;{dict1}</var>
+<arg>app_os=${app_os}</arg>
+<arg>proxmox=${proxmox_instance}</arg>
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<msg timestamp="20221021 12:52:50.440" level="INFO">&amp;{dict1} = { app_os={'osType': 'Linux', 'osName': 'RHEL', 'osVersion': '7', 'av_domain': 'tomcat', 'av_subdom': 'sub_tomcat', 'image': {'vm': 'base-tomcat9-rhel7', 'ct': 'dockerimage'}, 'plugin_cleanup_dir': 'rh...</msg>
+<status status="PASS" starttime="20221021 12:52:50.439" endtime="20221021 12:52:50.440"/>
+</kw>
+<kw name="Create Dictionary" library="BuiltIn">
+<var>&amp;{dict2}</var>
+<arg>${proxmox_instance.host}</arg>
+<arg>${dict1}</arg>
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<msg timestamp="20221021 12:52:50.441" level="INFO">&amp;{dict2} = { 192.168.101.16={'app_os': {'osType': 'Linux', 'osName': 'RHEL', 'osVersion': '7', 'av_domain': 'tomcat', 'av_subdom': 'sub_tomcat', 'image': {'vm': 'base-tomcat9-rhel7', 'ct': 'dockerimage'}, 'plugi...</msg>
+<status status="PASS" starttime="20221021 12:52:50.440" endtime="20221021 12:52:50.441"/>
+</kw>
+<kw name="Copy Dictionary" library="Collections">
+<var>${t_inv}</var>
+<arg>${inv}</arg>
+<arg>deepcopy=true</arg>
+<doc>Returns a copy of the given dictionary.</doc>
+<msg timestamp="20221021 12:52:50.441" level="INFO">${t_inv} = {'all': {'children': {'ungrouped': {'hosts': None}}}}</msg>
+<status status="PASS" starttime="20221021 12:52:50.441" endtime="20221021 12:52:50.441"/>
+</kw>
+<kw name="Set To Dictionary" library="Collections">
+<arg>${t_inv.all.children.ungrouped}</arg>
+<arg>hosts=${dict2}</arg>
+<doc>Adds the given ``key_value_pairs`` and ``items`` to the ``dictionary``.</doc>
+<status status="PASS" starttime="20221021 12:52:50.441" endtime="20221021 12:52:50.442"/>
+</kw>
+<kw name="Acquire Lock" library="pabot.PabotLib">
+<arg>GetIP</arg>
+<doc>Wait for a lock with name.
+[https://pabot.org/PabotLib.html?ref=log#acquire-lock|Open online docs.]</doc>
+<status status="PASS" starttime="20221021 12:52:50.442" endtime="20221021 12:52:50.446"/>
+</kw>
+<kw name="Get Parallel Value For Key" library="pabot.PabotLib">
+<var>@{inventory}</var>
+<arg>inventory</arg>
+<doc>Get the value for a key. If there is no value for the key then empty
+string is returned.
+[https://pabot.org/PabotLib.html?ref=log#get-parallel-value-for-key|Open online docs.]</doc>
+<msg timestamp="20221021 12:52:50.449" level="INFO">@{inventory} = [ ]</msg>
+<status status="PASS" starttime="20221021 12:52:50.446" endtime="20221021 12:52:50.449"/>
+</kw>
+<kw name="Log List" library="Collections">
+<arg>${inventory}</arg>
+<doc>Logs the length and contents of the ``list`` using given ``level``.</doc>
+<msg timestamp="20221021 12:52:50.450" level="INFO">List is empty.</msg>
+<status status="PASS" starttime="20221021 12:52:50.449" endtime="20221021 12:52:50.450"/>
+</kw>
+<kw name="Get Parallel Value For Key" library="pabot.PabotLib">
+<var>@{in_deploy}</var>
+<arg>ips_in_deploy</arg>
+<doc>Get the value for a key. If there is no value for the key then empty
+string is returned.
+[https://pabot.org/PabotLib.html?ref=log#get-parallel-value-for-key|Open online docs.]</doc>
+<msg timestamp="20221021 12:52:50.453" level="INFO">@{in_deploy} = [ ]</msg>
+<status status="PASS" starttime="20221021 12:52:50.450" endtime="20221021 12:52:50.453"/>
+</kw>
+<kw name="Get Parallel Value For Key" library="pabot.PabotLib">
+<var>${newid}</var>
+<arg>newid</arg>
+<doc>Get the value for a key. If there is no value for the key then empty
+string is returned.
+[https://pabot.org/PabotLib.html?ref=log#get-parallel-value-for-key|Open online docs.]</doc>
+<msg timestamp="20221021 12:52:50.456" level="INFO">${newid} = 5000</msg>
+<status status="PASS" starttime="20221021 12:52:50.454" endtime="20221021 12:52:50.456"/>
+</kw>
+<kw name="Log List" library="Collections">
+<arg>${in_deploy}</arg>
+<doc>Logs the length and contents of the ``list`` using given ``level``.</doc>
+<msg timestamp="20221021 12:52:50.457" level="INFO">List is empty.</msg>
+<status status="PASS" starttime="20221021 12:52:50.457" endtime="20221021 12:52:50.457"/>
+</kw>
+<kw name="Get Unused Ip" library="AvocadoUtils">
+<var>${ip_to_assign}</var>
+<arg>${inventory}</arg>
+<arg>${proxmox_instance}</arg>
+<arg>${in_deploy}</arg>
+<doc>Collecting unused ip addresses.</doc>
+<msg timestamp="20221021 12:52:50.457" level="INFO">proxmox = {'host': '192.168.101.16', 'ansible_user': 'root', 'ansible_ssh_pass': 'avcd@95135', 'ansible_ssh_host': '192.168.101.16', 'api_user': 'root@pam', 'pve_password': 'avcd@95135', 'pve_node': 'avcd-proxmox-16', 'default_proxmox_node': 'avcd-proxmox-16', 'vm_ip': 'static', 'vm_ips': ['192.168.102.140'], 'vm_ips_windows': ['192.168.102.232', '192.168.102.233', '192.168.102.234', '192.168.102.235'], 'ipconfig': {'params': {'netmask': 22, 'vmbr': 0, 'gateway': '192.168.100.254', 'dnsservers': '8.8.8.8', 'win_domain_controller_ip': '192.168.102.229'}}}</msg>
+<msg timestamp="20221021 12:52:50.457" level="INFO">Length of invetory = 0</msg>
+<msg timestamp="20221021 12:52:50.457" level="INFO">Inventory = []</msg>
+<msg timestamp="20221021 12:52:50.457" level="INFO">in deploy ips = []</msg>
+<msg timestamp="20221021 12:52:50.457" level="INFO">available_ips = ['192.168.102.140']</msg>
+<msg timestamp="20221021 12:52:50.457" level="INFO">available_ips now = ['192.168.102.140']</msg>
+<msg timestamp="20221021 12:52:50.457" level="INFO">available_ips now = ['192.168.102.140']</msg>
+<msg timestamp="20221021 12:52:50.457" level="INFO">Used IP = []</msg>
+<msg timestamp="20221021 12:52:50.457" level="INFO">Found unused ip 192.168.102.140</msg>
+<msg timestamp="20221021 12:52:50.457" level="INFO">${ip_to_assign} = 192.168.102.140</msg>
+<status status="PASS" starttime="20221021 12:52:50.457" endtime="20221021 12:52:50.457"/>
+</kw>
+<kw name="Get Vm Id To Assign" library="AvocadoUtils">
+<var>${vmid_to_assign}</var>
+<arg>${newid}</arg>
+<arg>${proxmox_instance.host}</arg>
+<doc>Collecting vm id to be addigned</doc>
+<msg timestamp="20221021 12:52:50.458" level="INFO">vmid_list = [100, 101, 102, 103, 104, 106, 107, 108, 109, 110, 111, 112, 1001, 1002, 1003, 5006, 5020, 5021, 5022, 8011, 8012, 8013, 8014, 9000, 9003, 9004, 9005, 9007, 9008, 9010, 9013, 9014, 9015, 9016, 9018, 9019, 9020, 9024, 9025, 9029, 9500, 9501, 9502, 9503, 9504, 9505, 9506, 9507, 9508, 9509, 9510, 9511, 9512, 9513, 9514, 9515, 9516]</msg>
+<msg timestamp="20221021 12:52:50.461" level="INFO">setting newid = 5001</msg>
+<msg timestamp="20221021 12:52:50.462" level="INFO">${vmid_to_assign} = 5001</msg>
+<status status="PASS" starttime="20221021 12:52:50.457" endtime="20221021 12:52:50.462"/>
+</kw>
+<kw name="Should Not Be Equal" library="BuiltIn">
+<arg>${ip_to_assign}</arg>
+<arg>NOT FOUND</arg>
+<arg>msg='All IPs are used from the proxmox ${proxmox_instance.host}'</arg>
+<doc>Fails if the given objects are equal.</doc>
+<status status="PASS" starttime="20221021 12:52:50.462" endtime="20221021 12:52:50.463"/>
+</kw>
+<kw name="Append To List" library="Collections">
+<arg>${in_deploy}</arg>
+<arg>${ip_to_assign}</arg>
+<doc>Adds ``values`` to the end of ``list``.</doc>
+<status status="PASS" starttime="20221021 12:52:50.463" endtime="20221021 12:52:50.463"/>
+</kw>
+<kw name="Set Parallel Value For Key" library="pabot.PabotLib">
+<arg>ips_in_deploy</arg>
+<arg>${in_deploy}</arg>
+<doc>Set a globally available key and value that can be accessed
+from all the pabot processes.
+[https://pabot.org/PabotLib.html?ref=log#set-parallel-value-for-key|Open online docs.]</doc>
+<status status="PASS" starttime="20221021 12:52:50.463" endtime="20221021 12:52:50.467"/>
+</kw>
+<kw name="Set Parallel Value For Key" library="pabot.PabotLib">
+<arg>newid</arg>
+<arg>${vmid_to_assign}</arg>
+<doc>Set a globally available key and value that can be accessed
+from all the pabot processes.
+[https://pabot.org/PabotLib.html?ref=log#set-parallel-value-for-key|Open online docs.]</doc>
+<status status="PASS" starttime="20221021 12:52:50.467" endtime="20221021 12:52:50.470"/>
+</kw>
+<kw name="Get Parallel Value For Key" library="pabot.PabotLib">
+<var>@{deploy}</var>
+<arg>ips_in_deploy</arg>
+<doc>Get the value for a key. If there is no value for the key then empty
+string is returned.
+[https://pabot.org/PabotLib.html?ref=log#get-parallel-value-for-key|Open online docs.]</doc>
+<msg timestamp="20221021 12:52:50.473" level="INFO">@{deploy} = [ 192.168.102.140 ]</msg>
+<status status="PASS" starttime="20221021 12:52:50.471" endtime="20221021 12:52:50.473"/>
+</kw>
+<kw name="Log List" library="Collections">
+<arg>${deploy}</arg>
+<arg>level=INFO</arg>
+<doc>Logs the length and contents of the ``list`` using given ``level``.</doc>
+<msg timestamp="20221021 12:52:50.473" level="INFO">List has one item:
+192.168.102.140</msg>
+<status status="PASS" starttime="20221021 12:52:50.473" endtime="20221021 12:52:50.473"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>${APP_OS_NAME}</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20221021 12:52:50.474" level="INFO">tomcat9_rhel7</msg>
+<status status="PASS" starttime="20221021 12:52:50.473" endtime="20221021 12:52:50.474"/>
+</kw>
+<kw name="Get Dash Name" library="AvocadoUtils">
+<var>${vm_name}</var>
+<arg>${APP_OS_NAME}</arg>
+<doc>Replacing underscore ``_`` in app os name to dashes ``-``.
+And adding -instance cnt at the end of returned string</doc>
+<msg timestamp="20221021 12:52:50.482" level="INFO">instance_cnt = {'tomcat9_rhel7': 1}</msg>
+<msg timestamp="20221021 12:52:50.482" level="INFO">${vm_name} = tomcat9-rhel7-1</msg>
+<status status="PASS" starttime="20221021 12:52:50.474" endtime="20221021 12:52:50.482"/>
+</kw>
+<kw name="Set Suite Variable" library="BuiltIn">
+<arg>${vm_name}</arg>
+<arg>${vm_name}</arg>
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<msg timestamp="20221021 12:52:50.483" level="INFO">${vm_name} = tomcat9-rhel7-1</msg>
+<status status="PASS" starttime="20221021 12:52:50.483" endtime="20221021 12:52:50.483"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>"vm_name = "${vm_name}</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20221021 12:52:50.484" level="INFO">"vm_name = "tomcat9-rhel7-1</msg>
+<status status="PASS" starttime="20221021 12:52:50.483" endtime="20221021 12:52:50.484"/>
+</kw>
+<kw name="Release Lock" library="pabot.PabotLib">
+<arg>GetIP</arg>
+<doc>Release a lock with name.
+[https://pabot.org/PabotLib.html?ref=log#release-lock|Open online docs.]</doc>
+<status status="PASS" starttime="20221021 12:52:50.484" endtime="20221021 12:52:50.490"/>
+</kw>
+<if>
+<branch type="IF" condition="'${app_os}[osType]' == 'Linux'">
+<kw name="Create Dictionary" library="BuiltIn">
+<var>${extra}</var>
+<arg>IP_ADDRESS=${ip_to_assign}</arg>
+<arg>GIVEN_NAME=${vm_name}</arg>
+<arg>NEW_ID=${vmid_to_assign}</arg>
+<arg>APP_OS_NAME=${APP_OS_NAME}</arg>
+<arg>NAME_PREFIX=${PREFIX}</arg>
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<msg timestamp="20221021 12:52:50.491" level="INFO">${extra} = {'IP_ADDRESS': '192.168.102.140', 'GIVEN_NAME': 'tomcat9-rhel7-1', 'NEW_ID': 5001, 'APP_OS_NAME': 'tomcat9_rhel7', 'NAME_PREFIX': 'psr'}</msg>
+<status status="PASS" starttime="20221021 12:52:50.490" endtime="20221021 12:52:50.491"/>
+</kw>
+<kw name="Run Playbook On Proxmox" library="AvocadoAnsibleRunner">
+<arg>new-deploy-vm.yml</arg>
+<arg>inventory=${t_inv}</arg>
+<arg>extra=${extra}</arg>
+<doc>Triggering ansible playbook on proxmox.</doc>
+<msg timestamp="20221021 12:52:53.347" level="INFO">*DEBUG:1666336973347.2314* {'all': {'children': {'ungrouped': {'hosts': {'192.168.101.16': {'app_os': {'osType': 'Linux', 'osName': 'RHEL', 'osVersion': '7', 'av_domain': 'tomcat', 'av_subdom': 'sub_tomcat', 'image': {'vm': 'base-tomcat9-rhel7', 'ct': 'dockerimage'}, 'plugin_cleanup_dir': 'rhel', 'plugin_installer_dir': 'centos7', 'apps': {'tomcat': {'process_name': 'java', 'processes': 2, 'systemd_service': 'tomcat9', 'proto': 'http', 'port': '8080', 'endpoint': '/', 'type': 'web', 'warriors': {'config': '/opt/tomcat/webapps/warriors/WEB-INF/database.properties', 'endpoint': '/warriors/login.jsp?txtusername=admin&amp;txtpass=admin', 'uname': 'admin', 'pwd': 'admin'}, 'struts': {'config': '/opt/tomcat/webapps/strutsapp/WEB-INF/classes/database.properties'}}}, 'default_app': 'tomcat', 'ansible_user': 'avocado', 'ansible_ssh_private_key_file': '../env/ssh_keys/key-connect-to-proxmox16', 'avocado_user': 'root', 'avocado_pwd': 'Avocado@2020', 'ansible_ssh_extra_args': '-o UserKnownHostsFile=/dev/null'}, 'proxmox': {'host': '192.168.101.16', 'ansible_user': 'root', 'ansible_ssh_pass': 'avcd@95135', 'ansible_ssh_host': '192.168.101.16', 'api_user': 'root@pam', 'pve_password': 'avcd@95135', 'pve_node': 'avcd-proxmox-16', 'default_proxmox_node': 'avcd-proxmox-16', 'vm_ip': 'static', 'vm_ips': ['192.168.102.140'], 'vm_ips_windows': ['192.168.102.232', '192.168.102.233', '192.168.102.234', '192.168.102.235'], 'ipconfig': {'params': {'netmask': 22, 'vmbr': 0, 'gateway': '192.168.100.254', 'dnsservers': '8.8.8.8', 'win_domain_controller_ip': '192.168.102.229'}}}}}}}}}</msg>
+<msg timestamp="20221021 12:52:53.348" level="INFO">*DEBUG:1666336973347.7356* {'IP_ADDRESS': '192.168.102.140', 'GIVEN_NAME': 'tomcat9-rhel7-1', 'NEW_ID': 5001, 'APP_OS_NAME': 'tomcat9_rhel7', 'NAME_PREFIX': 'psr'}</msg>
+<msg timestamp="20221021 12:52:53.353" level="INFO">*DEBUG:1666336973353.2173* 192.168.101.16</msg>
+<msg timestamp="20221021 12:52:53.353" level="INFO">*DEBUG:1666336973353.3796* {'app_os': {'osType': 'Linux', 'osName': 'RHEL', 'osVersion': '7', 'av_domain': 'tomcat', 'av_subdom': 'sub_tomcat', 'image': {'vm': 'base-tomcat9-rhel7', 'ct': 'dockerimage'}, 'plugin_cleanup_dir': 'rhel', 'plugin_installer_dir': 'centos7', 'apps': {'tomcat': {'process_name': 'java', 'processes': 2, 'systemd_service': 'tomcat9', 'proto': 'http', 'port': '8080', 'endpoint': '/', 'type': 'web', 'warriors': {'config': '/opt/tomcat/webapps/warriors/WEB-INF/database.properties', 'endpoint': '/warriors/login.jsp?txtusername=admin&amp;txtpass=admin', 'uname': 'admin', 'pwd': 'admin'}, 'struts': {'config': '/opt/tomcat/webapps/strutsapp/WEB-INF/classes/database.properties'}}}, 'default_app': 'tomcat', 'ansible_user': 'avocado', 'ansible_ssh_private_key_file': '../env/ssh_keys/key-connect-to-proxmox16', 'avocado_user': 'root', 'avocado_pwd': 'Avocado@2020', 'ansible_ssh_extra_args': '-o UserKnownHostsFile=/dev/null'}, 'proxmox': {'host': '192.168.101.16', 'ansible_user': 'root', 'ansible_ssh_pass': 'avcd@95135', 'ansible_ssh_host': '192.168.101.16', 'api_user': 'root@pam', 'pve_password': 'avcd@95135', 'pve_node': 'avcd-proxmox-16', 'default_proxmox_node': 'avcd-proxmox-16', 'vm_ip': 'static', 'vm_ips': ['192.168.102.140'], 'vm_ips_windows': ['192.168.102.232', '192.168.102.233', '192.168.102.234', '192.168.102.235'], 'ipconfig': {'params': {'netmask': 22, 'vmbr': 0, 'gateway': '192.168.100.254', 'dnsservers': '8.8.8.8', 'win_domain_controller_ip': '192.168.102.229'}}}}</msg>
+<msg timestamp="20221021 12:52:53.354" level="INFO">Random Suffix generated = rdnsmadtlsuyivs</msg>
+<msg timestamp="20221021 12:52:53.668" level="INFO">*INFO:1666336973667.6938* {'all': {'children': {'ungrouped': {'hosts': {'192.168.101.16': {'app_os': {'osType': 'Linux', 'osName': 'RHEL', 'osVersion': '7', 'av_domain': 'tomcat', 'av_subdom': 'sub_tomcat', 'image': {'vm': 'base-tomcat9-rhel7', 'ct': 'dockerimage'}, 'plugin_cleanup_dir': 'rhel', 'plugin_installer_dir': 'centos7', 'apps': {'tomcat': {'process_name': 'java', 'processes': 2, 'systemd_service': 'tomcat9', 'proto': 'http', 'port': '8080', 'endpoint': '/', 'type': 'web', 'warriors': {'config': '/opt/tomcat/webapps/warriors/WEB-INF/database.properties', 'endpoint': '/warriors/login.jsp?txtusername=admin&amp;txtpass=admin', 'uname': 'admin', 'pwd': 'admin'}, 'struts': {'config': '/opt/tomcat/webapps/strutsapp/WEB-INF/classes/database.properties'}}}, 'default_app': 'tomcat', 'ansible_user': 'avocado', 'ansible_ssh_private_key_file': '../env/ssh_keys/key-connect-to-proxmox16', 'avocado_user': 'root', 'avocado_pwd': 'Avocado@2020', 'ansible_ssh_extra_args': '-o UserKnownHostsFile=/dev/null'}, 'proxmox': {'host': '192.168.101.16', 'ansible_user': 'root', 'ansible_ssh_pass': 'avcd@95135', 'ansible_ssh_host': '192.168.101.16', 'api_user': 'root@pam', 'pve_password': 'avcd@95135', 'pve_node': 'avcd-proxmox-16', 'default_proxmox_node': 'avcd-proxmox-16', 'vm_ip': 'static', 'vm_ips': ['192.168.102.140'], 'vm_ips_windows': ['192.168.102.232', '192.168.102.233', '192.168.102.234', '192.168.102.235'], 'ipconfig': {'params': {'netmask': 22, 'vmbr': 0, 'gateway': '192.168.100.254', 'dnsservers': '8.8.8.8', 'win_domain_controller_ip': '192.168.102.229'}}}, 'ansible_host': '192.168.101.16', 'ansible_user': 'root', 'ansible_ssh_pass': 'avcd@95135', 'ansible_ssh_host': '192.168.101.16'}}}}}}</msg>
+<msg timestamp="20221021 12:56:45.525" level="INFO">*INFO:1666337205524.4734* status=successful: return code=0</msg>
+<msg timestamp="20221021 12:56:45.525" level="INFO">PLAY [all] *********************************************************************
+
+TASK [debug] *******************************************************************
+[0;32mok: [192.168.101.16] =&gt; {[0m
+[0;32m    "msg": "Creating vm from 'base-tomcat9-rhel7' with 192.168.102.140 and name psr-tomcat9-rhel7-1"[0m
+[0;32m}[0m
+
+TASK [debug] *******************************************************************
+[0;32mok: [192.168.101.16] =&gt; {[0m
+[0;32m    "msg": [[0m
+[0;32m        "IP_ADD = 192.168.102.140 ",[0m
+[0;32m        "VM_NAME = psr-tomcat9-rhel7-1",[0m
+[0;32m        "NEW_ID = 5001",[0m
+[0;32m        "NAME_PREFIX = psr"[0m
+[0;32m    ][0m
+[0;32m}[0m
+
+TASK [assert] ******************************************************************
+[0;32mok: [192.168.101.16] =&gt; {[0m
+[0;32m    "changed": false,[0m
+[0;32m    "msg": "All assertions passed"[0m
+[0;32m}[0m
+
+TASK [debug] *******************************************************************
+[0;32mok: [192.168.101.16] =&gt; {[0m
+[0;32m    "msg": "Creating vm from 'base-tomcat9-rhel7' with 192.168.102.140 and name psr-tomcat9-rhel7-1"[0m
+[0;32m}[0m
+
+TASK [wait for random seconds] *************************************************
+[1;35mce_appendices/interpreter_discovery.html for more information.[0m
+[0;32mok: [192.168.101.16][0m
+
+TASK [Clone test VM from base image snapshot] **********************************
+[0;33mchanged: [192.168.101.16][0m
+
+TASK [debug] *******************************************************************
+[0;32mok: [192.168.101.16] =&gt; {[0m
+[0;32m    "clone_mod": {[0m
+[0;32m        "attempts": 1,[0m
+[0;32m        "changed": true,[0m
+[0;32m        "failed": false,[0m
+[0;32m        "msg": "VM psr-tomcat9-rhel7-1 with newid 5001 cloned from vm with vmid 9510",[0m
+[0;32m        "vmid": 5001[0m
+[0;32m    }[0m
+[0;32m}[0m
+
+TASK [Waiting for virtual machine to clone completely before verification] *****
+[0;32mok: [192.168.101.16][0m
+
+TASK [Verify that vm exists after cloning operation] ***************************
+[0;32mok: [192.168.101.16] =&gt; {[0m
+[0;32m    "changed": false,[0m
+[0;32m    "msg": "cloning was successful"[0m
+[0;32m}[0m
+
+TASK [Create snapshot on test VM if not present] *******************************
+[0;33mchanged: [192.168.101.16][0m
+
+TASK [debug] *******************************************************************
+[0;32mok: [192.168.101.16] =&gt; {[0m
+[0;32m    "snap_mod": {[0m
+[0;32m        "attempts": 1,[0m
+[0;32m        "changed": true,[0m
+[0;32m        "failed": false,[0m
+[0;32m        "msg": "Snapshot tomcat9_rhel7 created"[0m
+[0;32m    }[0m
+[0;32m}[0m
+
+TASK [Waiting for virtual machine to snapshot to complete] *********************
+[0;32mok: [192.168.101.16][0m
+
+TASK [Revert Snapshot on test vm] **********************************************
+[0;33mchanged: [192.168.101.16][0m
+
+TASK [debug] *******************************************************************
+[0;32mok: [192.168.101.16] =&gt; {[0m
+[0;32m    "result": {[0m
+[0;32m        "changed": true,[0m
+[0;32m        "cmd": "A=$(qm list |grep  \"psr-tomcat9-rhel7-1\" | awk '{print $1}'); qm rollback $A  \"tomcat9_rhel7\"",[0m
+[0;32m        "delta": "0:00:03.285433",[0m
+[0;32m        "end": "2022-10-21 00:25:15.597223",[0m
+[0;32m        "failed": false,[0m
+[0;32m        "rc": 0,[0m
+[0;32m        "start": "2022-10-21 00:25:12.311790",[0m
+[0;32m        "stderr": "",[0m
+[0;32m        "stderr_lines": [],[0m
+[0;32m        "stdout": "",[0m
+[0;32m        "stdout_lines": [][0m
+[0;32m    }[0m
+[0;32m}[0m
+
+TASK [Assign ip address] *******************************************************
+[0;33mchanged: [192.168.101.16][0m
+
+TASK [Waiting for virtual machine to apply settings completely] ****************
+[0;32mok: [192.168.101.16][0m
+
+TASK [Starting virtual machine "psr-tomcat9-rhel7-1"] **************************
+[0;33mchanged: [192.168.101.16][0m
+
+TASK [Check IP address of new vm] **********************************************
+[1;35m[WARNING]: conditional statements should not include jinja2 templating[0m
+[1;35mdelimiters such as {{ }} or {% %}. Found: get_ip_cmd.rc == 0 and[0m
+[1;35mget_ip_cmd.stdout.find('"{{ IP_ADDRESS }}"') != -1[0m
+[1;30mFAILED - RETRYING: Check IP address of new vm (30 retries left).[0m
+[0;33mchanged: [192.168.101.16][0m
+
+TASK [Return IP address of new vm] *********************************************
+[0;33mchanged: [192.168.101.16][0m
+
+TASK [Read IP address of new vm] ***********************************************
+[0;33mchanged: [192.168.101.16][0m
+
+TASK [debug] *******************************************************************
+[0;32mok: [192.168.101.16] =&gt; {[0m
+[0;32m    "ip": {[0m
+[0;32m        "changed": true,[0m
+[0;32m        "cmd": "cat /tmp/ip-tomcat9-rhel7-1.txt",[0m
+[0;32m        "delta": "0:00:00.006895",[0m
+[0;32m        "end": "2022-10-21 00:26:31.270411",[0m
+[0;32m        "failed": false,[0m
+[0;32m        "rc": 0,[0m
+[0;32m        "start": "2022-10-21 00:26:31.263516",[0m
+[0;32m        "stderr": "",[0m
+[0;32m        "stderr_lines": [],[0m
+[0;32m        "stdout": "[\n   {\n      \"hardware-address\" : \"00:00:00:00:00:00\",\n      \"ip-addresses\" : [\n         {\n            \"ip-address\" : \"127.0.0.1\",\n            \"ip-address-type\" : \"ipv4\",\n            \"prefix\" : 8\n         },\n         {\n            \"ip-address\" : \"::1\",\n            \"ip-address-type\" : \"ipv6\",\n            \"prefix\" : 128\n         }\n      ],\n      \"name\" : \"lo\",\n      \"statistics\" : {\n         \"rx-bytes\" : 42799,\n         \"rx-dropped\" : 0,\n         \"rx-errs\" : 0,\n         \"rx-packets\" : 220,\n         \"tx-bytes\" : 42799,\n         \"tx-dropped\" : 0,\n         \"tx-errs\" : 0,\n         \"tx-packets\" : 220\n      }\n   },\n   {\n      \"hardware-address\" : \"52:3c:19:4b:83:45\",\n      \"ip-addresses\" : [\n         {\n            \"ip-address\" : \"192.168.102.140\",\n            \"ip-address-type\" : \"ipv4\",\n            \"prefix\" : 22\n         },\n         {\n            \"ip-address\" : \"fe80::503c:19ff:fe4b:8345\",\n            \"ip-address-type\" : \"ipv6\",\n            \"prefix\" : 64\n         }\n      ],\n      \"name\" : \"eth0\",\n      \"statistics\" : {\n         \"rx-bytes\" : 3088925,\n         \"rx-dropped\" : 0,\n         \"rx-errs\" : 0,\n         \"rx-packets\" : 1165,\n         \"tx-bytes\" : 44662,\n         \"tx-dropped\" : 0,\n         \"tx-errs\" : 0,\n         \"tx-packets\" : 438\n      }\n   }\n]",[0m
+[0;32m        "stdout_lines": [[0m
+[0;32m            "[",[0m
+[0;32m            "   {",[0m
+[0;32m            "      \"hardware-address\" : \"00:00:00:00:00:00\",",[0m
+[0;32m            "      \"ip-addresses\" : [",[0m
+[0;32m            "         {",[0m
+[0;32m            "            \"ip-address\" : \"127.0.0.1\",",[0m
+[0;32m            "            \"ip-address-type\" : \"ipv4\",",[0m
+[0;32m            "            \"prefix\" : 8",[0m
+[0;32m            "         },",[0m
+[0;32m            "         {",[0m
+[0;32m            "            \"ip-address\" : \"::1\",",[0m
+[0;32m            "            \"ip-address-type\" : \"ipv6\",",[0m
+[0;32m            "            \"prefix\" : 128",[0m
+[0;32m            "         }",[0m
+[0;32m            "      ],",[0m
+[0;32m            "      \"name\" : \"lo\",",[0m
+[0;32m            "      \"statistics\" : {",[0m
+[0;32m            "         \"rx-bytes\" : 42799,",[0m
+[0;32m            "         \"rx-dropped\" : 0,",[0m
+[0;32m            "         \"rx-errs\" : 0,",[0m
+[0;32m            "         \"rx-packets\" : 220,",[0m
+[0;32m            "         \"tx-bytes\" : 42799,",[0m
+[0;32m            "         \"tx-dropped\" : 0,",[0m
+[0;32m            "         \"tx-errs\" : 0,",[0m
+[0;32m            "         \"tx-packets\" : 220",[0m
+[0;32m            "      }",[0m
+[0;32m            "   },",[0m
+[0;32m            "   {",[0m
+[0;32m            "      \"hardware-address\" : \"52:3c:19:4b:83:45\",",[0m
+[0;32m            "      \"ip-addresses\" : [",[0m
+[0;32m            "         {",[0m
+[0;32m            "            \"ip-address\" : \"192.168.102.140\",",[0m
+[0;32m            "            \"ip-address-type\" : \"ipv4\",",[0m
+[0;32m            "            \"prefix\" : 22",[0m
+[0;32m            "         },",[0m
+[0;32m            "         {",[0m
+[0;32m            "            \"ip-address\" : \"fe80::503c:19ff:fe4b:8345\",",[0m
+[0;32m            "            \"ip-address-type\" : \"ipv6\",",[0m
+[0;32m            "            \"prefix\" : 64",[0m
+[0;32m            "         }",[0m
+[0;32m            "      ],",[0m
+[0;32m            "      \"name\" : \"eth0\",",[0m
+[0;32m            "      \"statistics\" : {",[0m
+[0;32m            "         \"rx-bytes\" : 3088925,",[0m
+[0;32m            "         \"rx-dropped\" : 0,",[0m
+[0;32m            "         \"rx-errs\" : 0,",[0m
+[0;32m            "         \"rx-packets\" : 1165,",[0m
+[0;32m            "         \"tx-bytes\" : 44662,",[0m
+[0;32m            "         \"tx-dropped\" : 0,",[0m
+[0;32m            "         \"tx-errs\" : 0,",[0m
+[0;32m            "         \"tx-packets\" : 438",[0m
+[0;32m            "      }",[0m
+[0;32m            "   }",[0m
+[0;32m            "]"[0m
+[0;32m        ][0m
+[0;32m    }[0m
+[0;32m}[0m
+
+TASK [copy ip addresses file from remote to local.] ****************************
+[0;33mchanged: [192.168.101.16][0m
+
+PLAY RECAP *********************************************************************
+[0;33m192.168.101.16[0m             : [0;32mok=22  [0m [0;33mchanged=9   [0m unreachable=0    failed=0    skipped=0    rescued=0    ignored=0</msg>
+<status status="PASS" starttime="20221021 12:52:50.491" endtime="20221021 12:56:45.526"/>
+</kw>
+<status status="PASS" starttime="20221021 12:52:50.490" endtime="20221021 12:56:45.526"/>
+</branch>
+<branch type="ELSE IF" condition="'${app_os}[osType]' == 'Windows'">
+<kw name="Create Dictionary" library="BuiltIn">
+<var>${extra}</var>
+<arg>IP_ADDRESS=${ip_to_assign}</arg>
+<arg>GIVEN_NAME=${vm_name}</arg>
+<arg>NEW_ID=${vmid_to_assign}</arg>
+<arg>APP_OS_NAME=${APP_OS_NAME}</arg>
+<arg>NAME_PREFIX=${PREFIX}</arg>
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<status status="NOT RUN" starttime="20221021 12:56:45.526" endtime="20221021 12:56:45.526"/>
+</kw>
+<kw name="Log To Console" library="BuiltIn">
+<arg>Started to clone Win VM from template, it will take up to 10min to create full clone of Win VM</arg>
+<arg>stream=STDOUT</arg>
+<arg>no_newline=False</arg>
+<doc>Logs the given message to the console.</doc>
+<status status="NOT RUN" starttime="20221021 12:56:45.527" endtime="20221021 12:56:45.527"/>
+</kw>
+<kw name="Run Playbook On Proxmox" library="AvocadoAnsibleRunner">
+<arg>win-new-deploy-vm.yml</arg>
+<arg>inventory=${t_inv}</arg>
+<arg>extra=${extra}</arg>
+<doc>Triggering ansible playbook on proxmox.</doc>
+<status status="NOT RUN" starttime="20221021 12:56:45.527" endtime="20221021 12:56:45.527"/>
+</kw>
+<status status="NOT RUN" starttime="20221021 12:56:45.526" endtime="20221021 12:56:45.527"/>
+</branch>
+<status status="PASS" starttime="20221021 12:52:50.490" endtime="20221021 12:56:45.527"/>
+</if>
+<kw name="Load JSON From File" library="JSONLibrary">
+<var>${result}</var>
+<arg>/tmp/${proxmox_instance.host}/tmp/ip-${vm_name}.txt</arg>
+<doc>Load JSON from file.</doc>
+<msg timestamp="20221021 12:56:45.529" level="INFO">${result} = [{'hardware-address': '00:00:00:00:00:00', 'ip-addresses': [{'ip-address': '127.0.0.1', 'ip-address-type': 'ipv4', 'prefix': 8}, {'ip-address': '::1', 'ip-address-type': 'ipv6', 'prefix': 128}], 'name...</msg>
+<status status="PASS" starttime="20221021 12:56:45.527" endtime="20221021 12:56:45.529"/>
+</kw>
+<kw name="Get Vm Ip" library="AvocadoAnsibleRunner">
+<var>${ip_address}</var>
+<arg>${result}</arg>
+<arg>${app_os}[osType]</arg>
+<arg>${ip_to_assign}</arg>
+<doc>Retrieving  ip addresses from two os type Windows and Linux</doc>
+<msg timestamp="20221021 12:56:45.530" level="INFO">${ip_address} = 192.168.102.140</msg>
+<status status="PASS" starttime="20221021 12:56:45.529" endtime="20221021 12:56:45.530"/>
+</kw>
+<kw name="Create Dictionary" library="BuiltIn">
+<var>&amp;{dict}</var>
+<arg>app_os=${app_os}</arg>
+<arg>proxmox_instance=${proxmox_instance}</arg>
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<msg timestamp="20221021 12:56:45.530" level="INFO">&amp;{dict} = { app_os={'osType': 'Linux', 'osName': 'RHEL', 'osVersion': '7', 'av_domain': 'tomcat', 'av_subdom': 'sub_tomcat', 'image': {'vm': 'base-tomcat9-rhel7', 'ct': 'dockerimage'}, 'plugin_cleanup_dir': 'rh...</msg>
+<status status="PASS" starttime="20221021 12:56:45.530" endtime="20221021 12:56:45.530"/>
+</kw>
+<kw name="Log Dictionary" library="Collections">
+<arg>${dict}</arg>
+<arg>level=INFO</arg>
+<doc>Logs the size and contents of the ``dictionary`` using given ``level``.</doc>
+<msg timestamp="20221021 12:56:45.531" level="INFO">Dictionary size is 2 and it contains following items:
+app_os: {'osType': 'Linux', 'osName': 'RHEL', 'osVersion': '7', 'av_domain': 'tomcat', 'av_subdom': 'sub_tomcat', 'image': {'vm': 'base-tomcat9-rhel7', 'ct': 'dockerimage'}, 'plugin_cleanup_dir': 'rhel', 'plugin_installer_dir': 'centos7', 'apps': {'tomcat': {'process_name': 'java', 'processes': 2, 'systemd_service': 'tomcat9', 'proto': 'http', 'port': '8080', 'endpoint': '/', 'type': 'web', 'warriors': {'config': '/opt/tomcat/webapps/warriors/WEB-INF/database.properties', 'endpoint': '/warriors/login.jsp?txtusername=admin&amp;txtpass=admin', 'uname': 'admin', 'pwd': 'admin'}, 'struts': {'config': '/opt/tomcat/webapps/strutsapp/WEB-INF/classes/database.properties'}}}, 'default_app': 'tomcat', 'ansible_user': 'avocado', 'ansible_ssh_private_key_file': '../env/ssh_keys/key-connect-to-proxmox16', 'avocado_user': 'root', 'avocado_pwd': 'Avocado@2020', 'ansible_ssh_extra_args': '-o UserKnownHostsFile=/dev/null'}
+proxmox_instance: {'host': '192.168.101.16', 'ansible_user': 'root', 'ansible_ssh_pass': 'avcd@95135', 'ansible_ssh_host': '192.168.101.16', 'api_user': 'root@pam', 'pve_password': 'avcd@95135', 'pve_node': 'avcd-proxmox-16', 'default_proxmox_node': 'avcd-proxmox-16', 'vm_ip': 'static', 'vm_ips': ['192.168.102.140'], 'vm_ips_windows': ['192.168.102.232', '192.168.102.233', '192.168.102.234', '192.168.102.235'], 'ipconfig': {'params': {'netmask': 22, 'vmbr': 0, 'gateway': '192.168.100.254', 'dnsservers': '8.8.8.8', 'win_domain_controller_ip': '192.168.102.229'}}}</msg>
+<status status="PASS" starttime="20221021 12:56:45.530" endtime="20221021 12:56:45.531"/>
+</kw>
+<kw name="Create Dictionary" library="BuiltIn">
+<var>&amp;{host}</var>
+<arg>${ip_address}=&amp;{dict}</arg>
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<msg timestamp="20221021 12:56:45.531" level="INFO">&amp;{host} = { 192.168.102.140={'app_os': {'osType': 'Linux', 'osName': 'RHEL', 'osVersion': '7', 'av_domain': 'tomcat', 'av_subdom': 'sub_tomcat', 'image': {'vm': 'base-tomcat9-rhel7', 'ct': 'dockerimage'}, 'plug...</msg>
+<status status="PASS" starttime="20221021 12:56:45.531" endtime="20221021 12:56:45.531"/>
+</kw>
+<kw name="Log Dictionary" library="Collections">
+<arg>${host}</arg>
+<arg>level=INFO</arg>
+<doc>Logs the size and contents of the ``dictionary`` using given ``level``.</doc>
+<msg timestamp="20221021 12:56:45.531" level="INFO">Dictionary has one item:
+192.168.102.140: {'app_os': {'osType': 'Linux', 'osName': 'RHEL', 'osVersion': '7', 'av_domain': 'tomcat', 'av_subdom': 'sub_tomcat', 'image': {'vm': 'base-tomcat9-rhel7', 'ct': 'dockerimage'}, 'plugin_cleanup_dir': 'rhel', 'plugin_installer_dir': 'centos7', 'apps': {'tomcat': {'process_name': 'java', 'processes': 2, 'systemd_service': 'tomcat9', 'proto': 'http', 'port': '8080', 'endpoint': '/', 'type': 'web', 'warriors': {'config': '/opt/tomcat/webapps/warriors/WEB-INF/database.properties', 'endpoint': '/warriors/login.jsp?txtusername=admin&amp;txtpass=admin', 'uname': 'admin', 'pwd': 'admin'}, 'struts': {'config': '/opt/tomcat/webapps/strutsapp/WEB-INF/classes/database.properties'}}}, 'default_app': 'tomcat', 'ansible_user': 'avocado', 'ansible_ssh_private_key_file': '../env/ssh_keys/key-connect-to-proxmox16', 'avocado_user': 'root', 'avocado_pwd': 'Avocado@2020', 'ansible_ssh_extra_args': '-o UserKnownHostsFile=/dev/null'}, 'proxmox_instance': {'host': '192.168.101.16', 'ansible_user': 'root', 'ansible_ssh_pass': 'avcd@95135', 'ansible_ssh_host': '192.168.101.16', 'api_user': 'root@pam', 'pve_password': 'avcd@95135', 'pve_node': 'avcd-proxmox-16', 'default_proxmox_node': 'avcd-proxmox-16', 'vm_ip': 'static', 'vm_ips': ['192.168.102.140'], 'vm_ips_windows': ['192.168.102.232', '192.168.102.233', '192.168.102.234', '192.168.102.235'], 'ipconfig': {'params': {'netmask': 22, 'vmbr': 0, 'gateway': '192.168.100.254', 'dnsservers': '8.8.8.8', 'win_domain_controller_ip': '192.168.102.229'}}}}</msg>
+<status status="PASS" starttime="20221021 12:56:45.531" endtime="20221021 12:56:45.532"/>
+</kw>
+<kw name="Acquire Lock" library="pabot.PabotLib">
+<arg>GetIP</arg>
+<doc>Wait for a lock with name.
+[https://pabot.org/PabotLib.html?ref=log#acquire-lock|Open online docs.]</doc>
+<status status="PASS" starttime="20221021 12:56:45.532" endtime="20221021 12:56:45.538"/>
+</kw>
+<kw name="Get Parallel Value For Key" library="pabot.PabotLib">
+<var>@{inventory}</var>
+<arg>inventory</arg>
+<doc>Get the value for a key. If there is no value for the key then empty
+string is returned.
+[https://pabot.org/PabotLib.html?ref=log#get-parallel-value-for-key|Open online docs.]</doc>
+<msg timestamp="20221021 12:56:45.541" level="INFO">@{inventory} = [ ]</msg>
+<status status="PASS" starttime="20221021 12:56:45.538" endtime="20221021 12:56:45.541"/>
+</kw>
+<kw name="Append To List" library="Collections">
+<arg>${inventory}</arg>
+<arg>${host}</arg>
+<doc>Adds ``values`` to the end of ``list``.</doc>
+<status status="PASS" starttime="20221021 12:56:45.541" endtime="20221021 12:56:45.542"/>
+</kw>
+<kw name="Set Parallel Value For Key" library="pabot.PabotLib">
+<arg>inventory</arg>
+<arg>${inventory}</arg>
+<doc>Set a globally available key and value that can be accessed
+from all the pabot processes.
+[https://pabot.org/PabotLib.html?ref=log#set-parallel-value-for-key|Open online docs.]</doc>
+<status status="PASS" starttime="20221021 12:56:45.542" endtime="20221021 12:56:45.544"/>
+</kw>
+<kw name="Get Parallel Value For Key" library="pabot.PabotLib">
+<var>@{in_deploy}</var>
+<arg>ips_in_deploy</arg>
+<doc>Get the value for a key. If there is no value for the key then empty
+string is returned.
+[https://pabot.org/PabotLib.html?ref=log#get-parallel-value-for-key|Open online docs.]</doc>
+<msg timestamp="20221021 12:56:45.547" level="INFO">@{in_deploy} = [ 192.168.102.140 ]</msg>
+<status status="PASS" starttime="20221021 12:56:45.545" endtime="20221021 12:56:45.547"/>
+</kw>
+<kw name="Log To Console" library="BuiltIn">
+<arg>ips_in_deploy ${in_deploy}</arg>
+<doc>Logs the given message to the console.</doc>
+<status status="PASS" starttime="20221021 12:56:45.547" endtime="20221021 12:56:45.547"/>
+</kw>
+<kw name="Remove Ip From List" library="AvocadoUtils">
+<var>@{new_in_deploy}</var>
+<arg>${in_deploy}</arg>
+<arg>${ip_to_assign}</arg>
+<doc>Deleting ip addresses from provided ip list</doc>
+<msg timestamp="20221021 12:56:45.547" level="INFO">@{new_in_deploy} = [ 192.168.102.140 ]</msg>
+<status status="PASS" starttime="20221021 12:56:45.547" endtime="20221021 12:56:45.547"/>
+</kw>
+<kw name="Log To Console" library="BuiltIn">
+<arg>new_in_deploy ${in_deploy}</arg>
+<doc>Logs the given message to the console.</doc>
+<status status="PASS" starttime="20221021 12:56:45.548" endtime="20221021 12:56:45.548"/>
+</kw>
+<kw name="Set Parallel Value For Key" library="pabot.PabotLib">
+<arg>ips_in_deploy</arg>
+<arg>${new_in_deploy}</arg>
+<doc>Set a globally available key and value that can be accessed
+from all the pabot processes.
+[https://pabot.org/PabotLib.html?ref=log#set-parallel-value-for-key|Open online docs.]</doc>
+<status status="PASS" starttime="20221021 12:56:45.548" endtime="20221021 12:56:45.551"/>
+</kw>
+<kw name="Release Lock" library="pabot.PabotLib">
+<arg>GetIP</arg>
+<doc>Release a lock with name.
+[https://pabot.org/PabotLib.html?ref=log#release-lock|Open online docs.]</doc>
+<status status="PASS" starttime="20221021 12:56:45.551" endtime="20221021 12:56:45.555"/>
+</kw>
+<kw name="Get Parallel Value For Key" library="pabot.PabotLib">
+<var>${inv_so_far}</var>
+<arg>inventory</arg>
+<doc>Get the value for a key. If there is no value for the key then empty
+string is returned.
+[https://pabot.org/PabotLib.html?ref=log#get-parallel-value-for-key|Open online docs.]</doc>
+<msg timestamp="20221021 12:56:45.558" level="INFO">${inv_so_far} = [{'192.168.102.140': {'app_os': {'osType': 'Linux', 'osName': 'RHEL', 'osVersion': '7', 'av_domain': 'tomcat', 'av_subdom': 'sub_tomcat', 'image': {'vm': 'base-tomcat9-rhel7', 'ct': 'dockerimage'}, 'p...</msg>
+<status status="PASS" starttime="20221021 12:56:45.555" endtime="20221021 12:56:45.558"/>
+</kw>
+<kw name="Log List" library="Collections">
+<arg>${inv_so_far}</arg>
+<doc>Logs the length and contents of the ``list`` using given ``level``.</doc>
+<msg timestamp="20221021 12:56:45.559" level="INFO">List has one item:
+{'192.168.102.140': {'app_os': {'osType': 'Linux', 'osName': 'RHEL', 'osVersion': '7', 'av_domain': 'tomcat', 'av_subdom': 'sub_tomcat', 'image': {'vm': 'base-tomcat9-rhel7', 'ct': 'dockerimage'}, 'plugin_cleanup_dir': 'rhel', 'plugin_installer_dir': 'centos7', 'apps': {'tomcat': {'process_name': 'java', 'processes': 2, 'systemd_service': 'tomcat9', 'proto': 'http', 'port': '8080', 'endpoint': '/', 'type': 'web', 'warriors': {'config': '/opt/tomcat/webapps/warriors/WEB-INF/database.properties', 'endpoint': '/warriors/login.jsp?txtusername=admin&amp;txtpass=admin', 'uname': 'admin', 'pwd': 'admin'}, 'struts': {'config': '/opt/tomcat/webapps/strutsapp/WEB-INF/classes/database.properties'}}}, 'default_app': 'tomcat', 'ansible_user': 'avocado', 'ansible_ssh_private_key_file': '../env/ssh_keys/key-connect-to-proxmox16', 'avocado_user': 'root', 'avocado_pwd': 'Avocado@2020', 'ansible_ssh_extra_args': '-o UserKnownHostsFile=/dev/null'}, 'proxmox_instance': {'host': '192.168.101.16', 'ansible_user': 'root', 'ansible_ssh_pass': 'avcd@95135', 'ansible_ssh_host': '192.168.101.16', 'api_user': 'root@pam', 'pve_password': 'avcd@95135', 'pve_node': 'avcd-proxmox-16', 'default_proxmox_node': 'avcd-proxmox-16', 'vm_ip': 'static', 'vm_ips': ['192.168.102.140'], 'vm_ips_windows': ['192.168.102.232', '192.168.102.233', '192.168.102.234', '192.168.102.235'], 'ipconfig': {'params': {'netmask': 22, 'vmbr': 0, 'gateway': '192.168.100.254', 'dnsservers': '8.8.8.8', 'win_domain_controller_ip': '192.168.102.229'}}}}}</msg>
+<status status="PASS" starttime="20221021 12:56:45.558" endtime="20221021 12:56:45.559"/>
+</kw>
+<kw name="Log To Console" library="BuiltIn">
+<arg>"Waiting till VM with IP ${ip_to_assign} is up and connecting "</arg>
+<doc>Logs the given message to the console.</doc>
+<status status="PASS" starttime="20221021 12:56:45.559" endtime="20221021 12:56:45.559"/>
+</kw>
+<kw name="Copy Dictionary" library="Collections">
+<var>${t_inv}</var>
+<arg>${inv}</arg>
+<arg>deepcopy=true</arg>
+<doc>Returns a copy of the given dictionary.</doc>
+<msg timestamp="20221021 12:56:45.559" level="INFO">${t_inv} = {'all': {'children': {'ungrouped': {'hosts': None}}}}</msg>
+<status status="PASS" starttime="20221021 12:56:45.559" endtime="20221021 12:56:45.559"/>
+</kw>
+<kw name="Set To Dictionary" library="Collections">
+<arg>${t_inv.all.children.ungrouped}</arg>
+<arg>hosts=${host}</arg>
+<doc>Adds the given ``key_value_pairs`` and ``items`` to the ``dictionary``.</doc>
+<status status="PASS" starttime="20221021 12:56:45.560" endtime="20221021 12:56:45.560"/>
+</kw>
+<kw name="Log To Console" library="BuiltIn">
+<arg>Before Wait Vm Test connection execution</arg>
+<arg>stream=STDOUT</arg>
+<arg>no_newline=False</arg>
+<doc>Logs the given message to the console.</doc>
+<status status="PASS" starttime="20221021 12:56:45.561" endtime="20221021 12:56:45.561"/>
+</kw>
+<if>
+<branch type="IF" condition="'${app_os}[osType]' == 'Linux'">
+<kw name="Run Playbook On Host" library="AvocadoAnsibleRunner">
+<arg>wait-till-vm-connects.yml</arg>
+<arg>inventory=${t_inv}</arg>
+<doc>Triggering ansible playbook on host machines.</doc>
+<msg timestamp="20221021 12:56:49.949" level="INFO">*DEBUG:1666337209948.7678* {'all': {'children': {'ungrouped': {'hosts': {'192.168.102.140': {'app_os': {'osType': 'Linux', 'osName': 'RHEL', 'osVersion': '7', 'av_domain': 'tomcat', 'av_subdom': 'sub_tomcat', 'image': {'vm': 'base-tomcat9-rhel7', 'ct': 'dockerimage'}, 'plugin_cleanup_dir': 'rhel', 'plugin_installer_dir': 'centos7', 'apps': {'tomcat': {'process_name': 'java', 'processes': 2, 'systemd_service': 'tomcat9', 'proto': 'http', 'port': '8080', 'endpoint': '/', 'type': 'web', 'warriors': {'config': '/opt/tomcat/webapps/warriors/WEB-INF/database.properties', 'endpoint': '/warriors/login.jsp?txtusername=admin&amp;txtpass=admin', 'uname': 'admin', 'pwd': 'admin'}, 'struts': {'config': '/opt/tomcat/webapps/strutsapp/WEB-INF/classes/database.properties'}}}, 'default_app': 'tomcat', 'ansible_user': 'avocado', 'ansible_ssh_private_key_file': '../env/ssh_keys/key-connect-to-proxmox16', 'avocado_user': 'root', 'avocado_pwd': 'Avocado@2020', 'ansible_ssh_extra_args': '-o UserKnownHostsFile=/dev/null'}, 'proxmox_instance': {'host': '192.168.101.16', 'ansible_user': 'root', 'ansible_ssh_pass': 'avcd@95135', 'ansible_ssh_host': '192.168.101.16', 'api_user': 'root@pam', 'pve_password': 'avcd@95135', 'pve_node': 'avcd-proxmox-16', 'default_proxmox_node': 'avcd-proxmox-16', 'vm_ip': 'static', 'vm_ips': ['192.168.102.140'], 'vm_ips_windows': ['192.168.102.232', '192.168.102.233', '192.168.102.234', '192.168.102.235'], 'ipconfig': {'params': {'netmask': 22, 'vmbr': 0, 'gateway': '192.168.100.254', 'dnsservers': '8.8.8.8', 'win_domain_controller_ip': '192.168.102.229'}}}}}}}}}</msg>
+<msg timestamp="20221021 12:56:49.950" level="INFO">*DEBUG:1666337209949.5872* None</msg>
+<msg timestamp="20221021 12:56:49.950" level="INFO">*DEBUG:1666337209949.6833* &lt;class 'NoneType'&gt;</msg>
+<msg timestamp="20221021 12:56:49.954" level="INFO">*DEBUG:1666337209953.8518* 192.168.102.140</msg>
+<msg timestamp="20221021 12:56:49.954" level="INFO">*DEBUG:1666337209953.9485* {'app_os': {'osType': 'Linux', 'osName': 'RHEL', 'osVersion': '7', 'av_domain': 'tomcat', 'av_subdom': 'sub_tomcat', 'image': {'vm': 'base-tomcat9-rhel7', 'ct': 'dockerimage'}, 'plugin_cleanup_dir': 'rhel', 'plugin_installer_dir': 'centos7', 'apps': {'tomcat': {'process_name': 'java', 'processes': 2, 'systemd_service': 'tomcat9', 'proto': 'http', 'port': '8080', 'endpoint': '/', 'type': 'web', 'warriors': {'config': '/opt/tomcat/webapps/warriors/WEB-INF/database.properties', 'endpoint': '/warriors/login.jsp?txtusername=admin&amp;txtpass=admin', 'uname': 'admin', 'pwd': 'admin'}, 'struts': {'config': '/opt/tomcat/webapps/strutsapp/WEB-INF/classes/database.properties'}}}, 'default_app': 'tomcat', 'ansible_user': 'avocado', 'ansible_ssh_private_key_file': '../env/ssh_keys/key-connect-to-proxmox16', 'avocado_user': 'root', 'avocado_pwd': 'Avocado@2020', 'ansible_ssh_extra_args': '-o UserKnownHostsFile=/dev/null'}, 'proxmox_instance': {'host': '192.168.101.16', 'ansible_user': 'root', 'ansible_ssh_pass': 'avcd@95135', 'ansible_ssh_host': '192.168.101.16', 'api_user': 'root@pam', 'pve_password': 'avcd@95135', 'pve_node': 'avcd-proxmox-16', 'default_proxmox_node': 'avcd-proxmox-16', 'vm_ip': 'static', 'vm_ips': ['192.168.102.140'], 'vm_ips_windows': ['192.168.102.232', '192.168.102.233', '192.168.102.234', '192.168.102.235'], 'ipconfig': {'params': {'netmask': 22, 'vmbr': 0, 'gateway': '192.168.100.254', 'dnsservers': '8.8.8.8', 'win_domain_controller_ip': '192.168.102.229'}}}}</msg>
+<msg timestamp="20221021 12:56:49.954" level="INFO">Random Suffix generated = kbcanlsblyvzfgf</msg>
+<msg timestamp="20221021 12:56:50.235" level="INFO">inventory file path = ansible_runner/private_data_dir/kbcanlsblyvzfgf</msg>
+<msg timestamp="20221021 12:56:50.235" level="INFO">*INFO:1666337210235.3303* {'all': {'children': {'ungrouped': {'hosts': {'192.168.102.140': {'app_os': {'osType': 'Linux', 'osName': 'RHEL', 'osVersion': '7', 'av_domain': 'tomcat', 'av_subdom': 'sub_tomcat', 'image': {'vm': 'base-tomcat9-rhel7', 'ct': 'dockerimage'}, 'plugin_cleanup_dir': 'rhel', 'plugin_installer_dir': 'centos7', 'apps': {'tomcat': {'process_name': 'java', 'processes': 2, 'systemd_service': 'tomcat9', 'proto': 'http', 'port': '8080', 'endpoint': '/', 'type': 'web', 'warriors': {'config': '/opt/tomcat/webapps/warriors/WEB-INF/database.properties', 'endpoint': '/warriors/login.jsp?txtusername=admin&amp;txtpass=admin', 'uname': 'admin', 'pwd': 'admin'}, 'struts': {'config': '/opt/tomcat/webapps/strutsapp/WEB-INF/classes/database.properties'}}}, 'default_app': 'tomcat', 'ansible_user': 'avocado', 'ansible_ssh_private_key_file': '../env/ssh_keys/key-connect-to-proxmox16', 'avocado_user': 'root', 'avocado_pwd': 'Avocado@2020', 'ansible_ssh_extra_args': '-o UserKnownHostsFile=/dev/null'}, 'proxmox_instance': {'host': '192.168.101.16', 'ansible_user': 'root', 'ansible_ssh_pass': 'avcd@95135', 'ansible_ssh_host': '192.168.101.16', 'api_user': 'root@pam', 'pve_password': 'avcd@95135', 'pve_node': 'avcd-proxmox-16', 'default_proxmox_node': 'avcd-proxmox-16', 'vm_ip': 'static', 'vm_ips': ['192.168.102.140'], 'vm_ips_windows': ['192.168.102.232', '192.168.102.233', '192.168.102.234', '192.168.102.235'], 'ipconfig': {'params': {'netmask': 22, 'vmbr': 0, 'gateway': '192.168.100.254', 'dnsservers': '8.8.8.8', 'win_domain_controller_ip': '192.168.102.229'}}}, 'ansible_host': '192.168.102.140', 'ansible_user': 'avocado', 'ansible_ssh_private_key_file': '../env/ssh_keys/key-connect-to-proxmox16', 'ansible_ssh_extra_args': '-o UserKnownHostsFile=/dev/null'}}}}}}</msg>
+<msg timestamp="20221021 12:57:00.326" level="INFO">*INFO:1666337220325.4492* status=failed: return code=4</msg>
+<msg timestamp="20221021 12:57:00.326" level="INFO">PLAY [all] *********************************************************************
+
+TASK [Gathering Facts] *********************************************************
+[1;31mfatal: [192.168.102.140]: UNREACHABLE! =&gt; {"changed": false, "msg": "Failed to connect to the host via ssh: Warning: Permanently added '192.168.102.140' (ECDSA) to the list of known hosts.\r\nLoad key \"../env/ssh_keys/key-connect-to-proxmox16\": invalid format\r\navocado@192.168.102.140: Permission denied (publickey,password).", "unreachable": true}[0m
+
+PLAY RECAP *********************************************************************
+[0;31m192.168.102.140[0m            : ok=0    changed=0    [1;31munreachable=1   [0m failed=0    skipped=0    rescued=0    ignored=0</msg>
+<msg timestamp="20221021 12:57:00.345" level="FAIL">Playbook execution failed: 4 != 0</msg>
+<status status="FAIL" starttime="20221021 12:56:45.561" endtime="20221021 12:57:00.345"/>
+</kw>
+<status status="FAIL" starttime="20221021 12:56:45.561" endtime="20221021 12:57:00.346"/>
+</branch>
+<branch type="ELSE IF" condition="'${app_os}[osType]' == 'Windows'">
+<kw name="Run Playbook On Host" library="AvocadoAnsibleRunner">
+<arg>wait-till-vm-connects_win.yml</arg>
+<arg>inventory=${t_inv}</arg>
+<doc>Triggering ansible playbook on host machines.</doc>
+<status status="NOT RUN" starttime="20221021 12:57:00.346" endtime="20221021 12:57:00.346"/>
+</kw>
+<status status="NOT RUN" starttime="20221021 12:57:00.346" endtime="20221021 12:57:00.346"/>
+</branch>
+<status status="FAIL" starttime="20221021 12:56:45.561" endtime="20221021 12:57:00.346"/>
+</if>
+<kw name="Log To Console" library="BuiltIn">
+<arg>Wait-till-vm-connects_wins Vm Test connection execution successful</arg>
+<arg>stream=STDOUT</arg>
+<arg>no_newline=False</arg>
+<doc>Logs the given message to the console.</doc>
+<status status="NOT RUN" starttime="20221021 12:57:00.347" endtime="20221021 12:57:00.347"/>
+</kw>
+<kw name="Log Dictionary" library="Collections">
+<arg>${host}</arg>
+<arg>level=INFO</arg>
+<doc>Logs the size and contents of the ``dictionary`` using given ``level``.</doc>
+<status status="NOT RUN" starttime="20221021 12:57:00.347" endtime="20221021 12:57:00.347"/>
+</kw>
+<status status="FAIL" starttime="20221021 12:52:50.438" endtime="20221021 12:57:00.347"/>
+</kw>
+<kw name="Set Suite Variable" library="BuiltIn">
+<arg>&amp;{plugin}</arg>
+<arg>&amp;{plugin}</arg>
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<status status="NOT RUN" starttime="20221021 12:57:00.348" endtime="20221021 12:57:00.348"/>
+</kw>
+<kw name="Get Plugin IP" library="orch-api-keywords">
+<var>${ip}</var>
+<arg>${plugin}</arg>
+<status status="NOT RUN" starttime="20221021 12:57:00.348" endtime="20221021 12:57:00.348"/>
+</kw>
+<kw name="Set Suite Variable" library="BuiltIn">
+<arg>&amp;{pos}</arg>
+<arg>&amp;{plugin}[${ip}][app_os]</arg>
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<status status="NOT RUN" starttime="20221021 12:57:00.348" endtime="20221021 12:57:00.348"/>
+</kw>
+<kw name="Set Suite Variable" library="BuiltIn">
+<arg>${ip}</arg>
+<arg>${ip}</arg>
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<status status="NOT RUN" starttime="20221021 12:57:00.349" endtime="20221021 12:57:00.349"/>
+</kw>
+<kw name="Get Dash Ip" library="AvocadoUtils">
+<var>${dash_ip}</var>
+<arg>${ip}</arg>
+<doc>Replacing dots ``.`` in ip addresses to dashes ``-``.</doc>
+<status status="NOT RUN" starttime="20221021 12:57:00.349" endtime="20221021 12:57:00.349"/>
+</kw>
+<kw name="Set Suite Variable" library="BuiltIn">
+<arg>${dash_ip}</arg>
+<arg>${dash_ip}</arg>
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<status status="NOT RUN" starttime="20221021 12:57:00.349" endtime="20221021 12:57:00.349"/>
+</kw>
+<kw name="Set Suite Variable" library="BuiltIn">
+<arg>${plugin_domain}</arg>
+<arg>${pos.av_domain}_${dash_ip}</arg>
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<status status="NOT RUN" starttime="20221021 12:57:00.349" endtime="20221021 12:57:00.349"/>
+</kw>
+<kw name="Set Suite Variable" library="BuiltIn">
+<arg>${plugin_subdom}</arg>
+<arg>${pos.av_subdom}_${dash_ip}</arg>
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<status status="NOT RUN" starttime="20221021 12:57:00.349" endtime="20221021 12:57:00.350"/>
+</kw>
+<kw name="Log Dictionary" library="Collections">
+<arg>${pos}</arg>
+<arg>level=INFO</arg>
+<doc>Logs the size and contents of the ``dictionary`` using given ``level``.</doc>
+<status status="NOT RUN" starttime="20221021 12:57:00.350" endtime="20221021 12:57:00.350"/>
+</kw>
+<tag>orchestrator</tag>
+<tag>platformAll</tag>
+<tag>rhel7</tag>
+<status status="FAIL" starttime="20221021 12:52:50.424" endtime="20221021 12:57:00.350">Playbook execution failed: 4 != 0</status>
+</test>
+<test id="s1-t2" name="Login to Orchestrator Via Api">
+<kw name="Login Into Orchestrator using API" library="orch-api-keywords">
+<kw name="Login Into Orchestrator" library="AvocadoAutomation">
+<msg timestamp="20221021 12:57:00.353" level="INFO">base_url = https://192.168.102.131:8443/orchestrator </msg>
+<msg timestamp="20221021 12:57:00.353" level="INFO">Inside login_into_orchestrator - orch_url = https://192.168.102.131:8443/orchestrator/oauth/token </msg>
+<msg timestamp="20221021 12:57:01.715" level="INFO">*INFO:1666337221715* access_token = eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhZG1pbmlzdHJhdG9yIiwiZ3JhbnRfdHlwZSI6InBhc3N3b3JkIiwic2NvcGUiOlsiVUkiXSwiaXNzIjoib3JjaGVzdHJhdG9yIiwibG9jYWxlIjoiZW5fVVMiLCJleHAiOjE2NjYzMzc4MjAsImZpcnN0X25hbWUiOiJBdm9jYWRvIiwiYXV0aG9yaXRpZXMiOlsiUkVQT1JUX1dSSVRFIiwiUkVQT1JUX1JFQUQiLCJVU0VSX1dSSVRFIiwiRE9NQUlOX1dSSVRFIiwiQVBQTElDQVRJT05fV1JJVEUiLCJQT0xJQ1lfUkVBRCIsIkFQUExJQ0FUSU9OX1JFQUQiLCJTRVRUSU5HU19SRUFEIiwiV1JJVEUiLCJSRUFEIiwiUExVR0lOX1JFQUQiLCJET01BSU5fUkVBRCIsIlBPTElDWV9XUklURSIsIlVTRVJfUkVBRCIsIlBMVUdJTl9XUklURSIsIlNFVFRJTkdTX1dSSVRFIl0sImp0aSI6ImE4NmNhMzEwLTM2MzEtNGNjYi1iYzhhLTVmMjNlMWM4NWE4MyIsImNsaWVudF9pZCI6ImFuZ3VsYXItdWkifQ.jcbeHxgbGN3VrnUfNWfokzfQhnTzcXVKQsoO9JyQKk7t9VwFB970t2GYG6RGvitp58Bw_qkh7G5Yrdg_hZY0dFCwF_nYd3plmmNyKM-kfSCeqcbizCjBQOkd-g3w28nlSod_FeIn_RYfI-18HoFUvD2YM0QZ8qQNvVRB_XhiwjF3-u4efHe_X6WqJ44nu07tYq1n_iZbFMgnlX_4toXczZvDtyzGOgqD1t0NIAIaIRHKzvN2H9DOBmgFu6eqfVkl95WcOjYbtv90SJwf7kOhLNMABSbaklyQFyYhovbl4XUpFn7aDmIYGvjHOB_N2uL9NmvssJ18XYSc25wlZuZvwQ</msg>
+<msg timestamp="20221021 12:57:01.715" level="INFO">*INFO:1666337221715* GET url = https://192.168.102.131:8443/orchestrator/api/dashboard/version.ws</msg>
+<msg timestamp="20221021 12:57:01.715" level="INFO">*INFO:1666337221715* GET params = None</msg>
+<msg timestamp="20221021 12:57:02.061" level="INFO">*INFO:1666337222061* Response statusCode = 200</msg>
+<msg timestamp="20221021 12:57:02.061" level="INFO">*INFO:1666337222061* Response content = 2.5.45</msg>
+<msg timestamp="20221021 12:57:02.064" level="INFO">Using orchestrator version = 2.5.45</msg>
+<msg timestamp="20221021 12:57:02.065" level="INFO">*INFO:1666337222064* GET url = https://192.168.102.131:8443/orchestrator/api/applicationSecurityPolicy/policyAction/views.ws</msg>
+<msg timestamp="20221021 12:57:02.065" level="INFO">*INFO:1666337222064* GET params = None</msg>
+<msg timestamp="20221021 12:57:02.369" level="INFO">*INFO:1666337222369* Response statusCode = 200</msg>
+<msg timestamp="20221021 12:57:02.369" level="INFO">*INFO:1666337222369* Response content = [{"actionId":1,"actionName":"allow","enabled":true,"createdOn":0,"updatedOn":0},{"actionId":2,"actionName":"allow analyze","enabled":true,"createdOn":0,"updatedOn":0},{"actionId":3,"actionName":"drop","enabled":true,"createdOn":0,"updatedOn":0},{"actionId":4,"actionName":"drop analyze","enabled":true,"createdOn":0,"updatedOn":0},{"actionId":5,"actionName":"no action","enabled":true,"createdOn":0,"updatedOn":0}]</msg>
+<msg timestamp="20221021 12:57:02.370" level="INFO">*INFO:1666337222369* GET url = https://192.168.102.131:8443/orchestrator/api/applicationSecurityPolicy/policySubAction/views.ws</msg>
+<msg timestamp="20221021 12:57:02.370" level="INFO">*INFO:1666337222369* GET params = None</msg>
+<msg timestamp="20221021 12:57:02.634" level="INFO">*INFO:1666337222634* Response statusCode = 200</msg>
+<msg timestamp="20221021 12:57:02.634" level="INFO">*INFO:1666337222634* Response content = [{"subActionId":1,"subActionName":"mirror","enabled":true,"createdOn":0,"updatedOn":0},{"subActionId":2,"subActionName":"redaction","enabled":true,"createdOn":0,"updatedOn":0},{"subActionId":3,"subActionName":"results cache flush","enabled":true,"createdOn":0,"updatedOn":0},{"subActionId":4,"subActionName":"memory lock","enabled":true,"createdOn":0,"updatedOn":0},{"subActionId":5,"subActionName":"encrypt","enabled":true,"createdOn":0,"updatedOn":0},{"subActionId":6,"subActionName":"log","enabled":true,"createdOn":0,"updatedOn":0},{"subActionId":7,"subActionName":"alert","enabled":true,"createdOn":0,"updatedOn":0},{"subActionId":8,"subActionName":"event","enabled":true,"createdOn":0,"updatedOn":0},{"subActionId":9,"subActionName":"rate limit","enabled":true,"createdOn":0,"updatedOn":0}]</msg>
+<status status="PASS" starttime="20221021 12:57:00.352" endtime="20221021 12:57:02.635"/>
+</kw>
+<status status="PASS" starttime="20221021 12:57:00.352" endtime="20221021 12:57:02.635"/>
+</kw>
+<tag>orchestrator</tag>
+<tag>platformLinux</tag>
+<tag>rhel7</tag>
+<status status="PASS" starttime="20221021 12:57:00.351" endtime="20221021 12:57:02.636"/>
+</test>
+<test id="s1-t3" name="Create And Verify Multiple Domains">
+<kw name="Add Domain" library="AvocadoAutomation">
+<arg>${plugin_domain}</arg>
+<msg timestamp="20221021 12:57:02.641" level="FAIL">Variable '${plugin_domain}' not found.</msg>
+<status status="FAIL" starttime="20221021 12:57:02.639" endtime="20221021 12:57:02.641"/>
+</kw>
+<kw name="Add Domain" library="AvocadoAutomation">
+<arg>D1_${ip}</arg>
+<status status="NOT RUN" starttime="20221021 12:57:02.641" endtime="20221021 12:57:02.641"/>
+</kw>
+<kw name="Verify Presence Of Domain" library="orch-api-keywords">
+<arg>D1_${ip}</arg>
+<status status="NOT RUN" starttime="20221021 12:57:02.641" endtime="20221021 12:57:02.641"/>
+</kw>
+<kw name="Add Domain" library="AvocadoAutomation">
+<arg>D2_${ip}</arg>
+<status status="NOT RUN" starttime="20221021 12:57:02.642" endtime="20221021 12:57:02.642"/>
+</kw>
+<kw name="Verify Presence Of Domain" library="orch-api-keywords">
+<arg>D2_${ip}</arg>
+<status status="NOT RUN" starttime="20221021 12:57:02.642" endtime="20221021 12:57:02.642"/>
+</kw>
+<kw name="Add Domain" library="AvocadoAutomation">
+<arg>D3_${ip}</arg>
+<status status="NOT RUN" starttime="20221021 12:57:02.642" endtime="20221021 12:57:02.642"/>
+</kw>
+<kw name="Verify Presence Of Domain" library="orch-api-keywords">
+<arg>D3_${ip}</arg>
+<status status="NOT RUN" starttime="20221021 12:57:02.643" endtime="20221021 12:57:02.643"/>
+</kw>
+<tag>orchestrator</tag>
+<tag>platformLinux</tag>
+<tag>rhel7</tag>
+<status status="FAIL" starttime="20221021 12:57:02.638" endtime="20221021 12:57:02.643">Variable '${plugin_domain}' not found.</status>
+</test>
+<test id="s1-t4" name="Create And Verify Multiple Sub Domains">
+<kw name="Add Subdomain" library="AvocadoAutomation">
+<arg>${plugin_subdom}</arg>
+<arg>${plugin_domain}</arg>
+<msg timestamp="20221021 12:57:02.647" level="FAIL">Variable '${plugin_subdom}' not found.</msg>
+<status status="FAIL" starttime="20221021 12:57:02.645" endtime="20221021 12:57:02.647"/>
+</kw>
+<kw name="Add Subdomain" library="AvocadoAutomation">
+<arg>SD1_${ip}</arg>
+<arg>D1_${ip}</arg>
+<status status="NOT RUN" starttime="20221021 12:57:02.647" endtime="20221021 12:57:02.647"/>
+</kw>
+<kw name="Verify Presence Of SubDomain In" library="orch-api-keywords">
+<arg>SD1_${ip}</arg>
+<arg>D1_${ip}</arg>
+<status status="NOT RUN" starttime="20221021 12:57:02.647" endtime="20221021 12:57:02.647"/>
+</kw>
+<kw name="Add Subdomain" library="AvocadoAutomation">
+<arg>SD2_${ip}</arg>
+<arg>D1_${ip}</arg>
+<status status="NOT RUN" starttime="20221021 12:57:02.648" endtime="20221021 12:57:02.648"/>
+</kw>
+<kw name="Verify Presence Of SubDomain In" library="orch-api-keywords">
+<arg>SD2_${ip}</arg>
+<arg>D1_${ip}</arg>
+<status status="NOT RUN" starttime="20221021 12:57:02.648" endtime="20221021 12:57:02.648"/>
+</kw>
+<kw name="Add Subdomain" library="AvocadoAutomation">
+<arg>SD3_${ip}</arg>
+<arg>D1_${ip}</arg>
+<status status="NOT RUN" starttime="20221021 12:57:02.648" endtime="20221021 12:57:02.648"/>
+</kw>
+<kw name="Verify Presence Of SubDomain In" library="orch-api-keywords">
+<arg>SD3_${ip}</arg>
+<arg>D1_${ip}</arg>
+<status status="NOT RUN" starttime="20221021 12:57:02.648" endtime="20221021 12:57:02.648"/>
+</kw>
+<tag>orchestrator</tag>
+<tag>platformLinux</tag>
+<tag>rhel7</tag>
+<status status="FAIL" starttime="20221021 12:57:02.644" endtime="20221021 12:57:02.649">Variable '${plugin_subdom}' not found.</status>
+</test>
+<test id="s1-t5" name="Delete Domains and Subdomains">
+<kw name="Delete Domain" library="AvocadoAutomation">
+<arg>D2_${ip}</arg>
+<msg timestamp="20221021 12:57:02.651" level="FAIL">Variable '${ip}' not found.</msg>
+<status status="FAIL" starttime="20221021 12:57:02.650" endtime="20221021 12:57:02.652"/>
+</kw>
+<kw name="Verify Absense Of Domain" library="orch-api-keywords">
+<arg>D2_${ip}</arg>
+<status status="NOT RUN" starttime="20221021 12:57:02.652" endtime="20221021 12:57:02.652"/>
+</kw>
+<kw name="Delete Domain" library="AvocadoAutomation">
+<arg>D3_${ip}</arg>
+<status status="NOT RUN" starttime="20221021 12:57:02.652" endtime="20221021 12:57:02.652"/>
+</kw>
+<kw name="Verify Absense Of Domain" library="orch-api-keywords">
+<arg>D3_${ip}</arg>
+<status status="NOT RUN" starttime="20221021 12:57:02.652" endtime="20221021 12:57:02.652"/>
+</kw>
+<kw name="Delete Subdomain" library="AvocadoAutomation">
+<arg>SD3_${ip}</arg>
+<arg>D1_${ip}</arg>
+<status status="NOT RUN" starttime="20221021 12:57:02.652" endtime="20221021 12:57:02.653"/>
+</kw>
+<kw name="Verify Absense Of SubDomain In" library="orch-api-keywords">
+<arg>SD3_${ip}</arg>
+<arg>D1_${ip}</arg>
+<status status="NOT RUN" starttime="20221021 12:57:02.653" endtime="20221021 12:57:02.653"/>
+</kw>
+<kw name="Delete Subdomain" library="AvocadoAutomation">
+<arg>SD2_${ip}</arg>
+<arg>D1_${ip}</arg>
+<status status="NOT RUN" starttime="20221021 12:57:02.653" endtime="20221021 12:57:02.653"/>
+</kw>
+<kw name="Verify Absense Of SubDomain In" library="orch-api-keywords">
+<arg>SD2_${ip}</arg>
+<arg>D1_${ip}</arg>
+<status status="NOT RUN" starttime="20221021 12:57:02.653" endtime="20221021 12:57:02.653"/>
+</kw>
+<kw name="Delete Domain" library="AvocadoAutomation">
+<arg>D1_${ip}</arg>
+<status status="NOT RUN" starttime="20221021 12:57:02.653" endtime="20221021 12:57:02.653"/>
+</kw>
+<kw name="Verify Absense Of Domain" library="orch-api-keywords">
+<arg>D1_${ip}</arg>
+<status status="NOT RUN" starttime="20221021 12:57:02.653" endtime="20221021 12:57:02.654"/>
+</kw>
+<tag>orchestrator</tag>
+<tag>platformLinux</tag>
+<tag>rhel7</tag>
+<status status="FAIL" starttime="20221021 12:57:02.650" endtime="20221021 12:57:02.654">Variable '${ip}' not found.</status>
+</test>
+<test id="s1-t6" name="Create Multiple Users, Login For First Time, Change Passwords and Verify Login using them, Delete users">
+<kw name="Run Only Once" library="pabot.PabotLib">
+<arg>Test User Creation, Setting Password, Logging In And Deletion Of Multiple Users</arg>
+<doc>Runs a keyword only once in one of the parallel processes.
+[https://pabot.org/PabotLib.html?ref=log#run-only-once|Open online docs.]</doc>
+<kw name="Test User Creation, Setting Password, Logging In And Deletion Of Multiple Users" library="orch-api-keywords">
+<kw name="Create User" library="AvocadoAutomation">
+<arg>manoj</arg>
+<arg>Avocado_protect@21</arg>
+<msg timestamp="20221021 12:57:02.666" level="INFO">custId = 0</msg>
+<msg timestamp="20221021 12:57:02.666" level="INFO">deptId = 0</msg>
+<msg timestamp="20221021 12:57:02.666" level="INFO">*INFO:1666337222666* POST url = https://192.168.102.131:8443/orchestrator/api/user/create.ws</msg>
+<msg timestamp="20221021 12:57:02.666" level="INFO">*INFO:1666337222666* POST payload = {'firstName': 'manoj', 'lastName': '', 'email': 'manoj@avocadosys.com', 'phone': '1234567900', 'username': 'manoj', 'password': 'Avocado_protect@21', 'confirmPassword': 'Avocado_protect@21', 'listTenancy': [{'customer': {'custId': 0}, 'department': {'custId': 0, 'deptId': 0}, 'userRW': False, 'settingsRW': False, 'reportRW': False, 'policyRW': False, 'applicationRW': False}], 'enabled': True, 'userId': 0}</msg>
+<msg timestamp="20221021 12:57:02.666" level="INFO">*INFO:1666337222666* POST params = None</msg>
+<msg timestamp="20221021 12:57:04.099" level="INFO">*INFO:1666337224098* Response statusCode = 400</msg>
+<msg timestamp="20221021 12:57:04.099" level="INFO">*INFO:1666337224099* Response content = "Username belongs to another user."</msg>
+<msg timestamp="20221021 12:57:04.100" level="INFO">*INFO:1666337224099* ERROR = err = None</msg>
+<msg timestamp="20221021 12:57:04.121" level="FAIL">'Username belongs to another user.' does not contain 'User created successfully.'</msg>
+<status status="FAIL" starttime="20221021 12:57:02.666" endtime="20221021 12:57:04.121"/>
+</kw>
+<kw name="Verify User Is Added" library="AvocadoAutomation">
+<arg>manoj</arg>
+<status status="NOT RUN" starttime="20221021 12:57:04.122" endtime="20221021 12:57:04.122"/>
+</kw>
+<kw name="Login For First Time" library="AvocadoAutomation">
+<arg>manoj</arg>
+<arg>Avocado_protect@21</arg>
+<arg>Avocado_protect@20</arg>
+<status status="NOT RUN" starttime="20221021 12:57:04.122" endtime="20221021 12:57:04.122"/>
+</kw>
+<kw name="Login Into Orchestrator As" library="AvocadoAutomation">
+<arg>manoj</arg>
+<status status="NOT RUN" starttime="20221021 12:57:04.122" endtime="20221021 12:57:04.122"/>
+</kw>
+<kw name="Delete User" library="AvocadoAutomation">
+<arg>manoj</arg>
+<status status="NOT RUN" starttime="20221021 12:57:04.122" endtime="20221021 12:57:04.122"/>
+</kw>
+<kw name="Create User" library="AvocadoAutomation">
+<arg>andrzej</arg>
+<arg>Avocado_protect@21</arg>
+<status status="NOT RUN" starttime="20221021 12:57:04.122" endtime="20221021 12:57:04.123"/>
+</kw>
+<kw name="Verify User Is Added" library="AvocadoAutomation">
+<arg>andrzej</arg>
+<status status="NOT RUN" starttime="20221021 12:57:04.123" endtime="20221021 12:57:04.123"/>
+</kw>
+<kw name="Login For First Time" library="AvocadoAutomation">
+<arg>andrzej</arg>
+<arg>Avocado_protect@21</arg>
+<arg>Avocado_protect@20</arg>
+<status status="NOT RUN" starttime="20221021 12:57:04.123" endtime="20221021 12:57:04.123"/>
+</kw>
+<kw name="Login Into Orchestrator As" library="AvocadoAutomation">
+<arg>andrzej</arg>
+<status status="NOT RUN" starttime="20221021 12:57:04.123" endtime="20221021 12:57:04.123"/>
+</kw>
+<kw name="Delete User" library="AvocadoAutomation">
+<arg>andrzej</arg>
+<status status="NOT RUN" starttime="20221021 12:57:04.124" endtime="20221021 12:57:04.124"/>
+</kw>
+<kw name="Create User" library="AvocadoAutomation">
+<arg>sankalp</arg>
+<arg>Avocado_protect@21</arg>
+<status status="NOT RUN" starttime="20221021 12:57:04.124" endtime="20221021 12:57:04.124"/>
+</kw>
+<kw name="Verify User Is Added" library="AvocadoAutomation">
+<arg>sankalp</arg>
+<status status="NOT RUN" starttime="20221021 12:57:04.124" endtime="20221021 12:57:04.124"/>
+</kw>
+<kw name="Login For First Time" library="AvocadoAutomation">
+<arg>sankalp</arg>
+<arg>Avocado_protect@21</arg>
+<arg>Avocado_protect@20</arg>
+<status status="NOT RUN" starttime="20221021 12:57:04.124" endtime="20221021 12:57:04.124"/>
+</kw>
+<kw name="Login Into Orchestrator As" library="AvocadoAutomation">
+<arg>sankalp</arg>
+<status status="NOT RUN" starttime="20221021 12:57:04.125" endtime="20221021 12:57:04.125"/>
+</kw>
+<kw name="Delete User" library="AvocadoAutomation">
+<arg>sankalp</arg>
+<status status="NOT RUN" starttime="20221021 12:57:04.125" endtime="20221021 12:57:04.125"/>
+</kw>
+<status status="FAIL" starttime="20221021 12:57:02.666" endtime="20221021 12:57:04.125"/>
+</kw>
+<status status="FAIL" starttime="20221021 12:57:02.656" endtime="20221021 12:57:04.131"/>
+</kw>
+<tag>orchestrator</tag>
+<tag>platformLinux</tag>
+<tag>rhel7</tag>
+<status status="FAIL" starttime="20221021 12:57:02.655" endtime="20221021 12:57:04.132">'Username belongs to another user.' does not contain 'User created successfully.'</status>
+</test>
+<test id="s1-t7" name="Manual Install With Protection Mode">
+<kw name="Create Register Plugin" library="AvocadoAutomation">
+<var>${secrets}</var>
+<arg>manual-${PREFIX}-${vm_name}</arg>
+<arg>True</arg>
+<arg>${plugin_domain}</arg>
+<arg>${plugin_subdom}</arg>
+<arg>False</arg>
+<msg timestamp="20221021 12:57:04.135" level="FAIL">Variable '${plugin_domain}' not found.</msg>
+<status status="FAIL" starttime="20221021 12:57:04.133" endtime="20221021 12:57:04.135"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>${secrets}</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="NOT RUN" starttime="20221021 12:57:04.136" endtime="20221021 12:57:04.136"/>
+</kw>
+<kw name="Run Manual Installer Using install_adpl.sh Script" library="orch-api-keywords">
+<arg>${secrets}</arg>
+<status status="NOT RUN" starttime="20221021 12:57:04.136" endtime="20221021 12:57:04.136"/>
+</kw>
+<kw name="Verify AppManager Is Running" library="orch-api-keywords">
+<arg>${plugin}</arg>
+<status status="NOT RUN" starttime="20221021 12:57:04.136" endtime="20221021 12:57:04.136"/>
+</kw>
+<kw name="Restart Application On Plugin With Protection Mode" library="orch-api-keywords">
+<arg>${plugin}</arg>
+<arg>${APP_NAME}</arg>
+<status status="NOT RUN" starttime="20221021 12:57:04.137" endtime="20221021 12:57:04.137"/>
+</kw>
+<kw name="Verify Application Can NOT Be Accessed From Host" library="orch-api-keywords">
+<arg>${APP_NAME}</arg>
+<arg>${plugin}</arg>
+<arg>localhost</arg>
+<status status="NOT RUN" starttime="20221021 12:57:04.137" endtime="20221021 12:57:04.137"/>
+</kw>
+<tag>manual</tag>
+<tag>orchestrator</tag>
+<tag>platformLinux</tag>
+<tag>rhel7</tag>
+<status status="FAIL" starttime="20221021 12:57:04.133" endtime="20221021 12:57:04.137">Variable '${plugin_domain}' not found.</status>
+</test>
+<test id="s1-t8" name="Verify Deletion Of Plugin From Orchestrator">
+<kw name="Stop Application On Plugin" library="orch-api-keywords">
+<arg>${plugin}</arg>
+<arg>${APP_NAME}</arg>
+<msg timestamp="20221021 12:57:04.140" level="FAIL">Variable '${plugin}' not found.</msg>
+<status status="FAIL" starttime="20221021 12:57:04.139" endtime="20221021 12:57:04.141"/>
+</kw>
+<kw name="Verify Deletion of Plugin From Orchestrator" library="orch-api-keywords">
+<status status="NOT RUN" starttime="20221021 12:57:04.141" endtime="20221021 12:57:04.141"/>
+</kw>
+<tag>manual</tag>
+<tag>orchestrator</tag>
+<tag>platformLinux</tag>
+<tag>rhel7</tag>
+<status status="FAIL" starttime="20221021 12:57:04.138" endtime="20221021 12:57:04.141">Variable '${plugin}' not found.</status>
+</test>
+<test id="s1-t9" name="Verify Uninstallation of plugin">
+<kw name="Uninstall Plugin" library="orch-api-keywords">
+<arg>${plugin}</arg>
+<arg>${ip}</arg>
+<arg>${APP_NAME}</arg>
+<msg timestamp="20221021 12:57:04.144" level="FAIL">Variable '${plugin}' not found.</msg>
+<status status="FAIL" starttime="20221021 12:57:04.143" endtime="20221021 12:57:04.144"/>
+</kw>
+<tag>manual</tag>
+<tag>orchestrator</tag>
+<tag>platformLinux</tag>
+<tag>rhel7</tag>
+<status status="FAIL" starttime="20221021 12:57:04.143" endtime="20221021 12:57:04.144">Variable '${plugin}' not found.</status>
+</test>
+<test id="s1-t10" name="Delete Plugin Package ${pos.osType}#${pos.osName}#${pos.osVersion}">
+<kw name="Acquire Lock" library="pabot.PabotLib">
+<arg>${pos.osType}#${pos.osName}#${pos.osVersion}</arg>
+<doc>Wait for a lock with name.
+[https://pabot.org/PabotLib.html?ref=log#acquire-lock|Open online docs.]</doc>
+<msg timestamp="20221021 12:57:04.152" level="FAIL">Resolving variable '${pos.osType}' failed: Variable '${pos}' not found. Did you mean:
+    ${APP_OS}</msg>
+<status status="FAIL" starttime="20221021 12:57:04.150" endtime="20221021 12:57:04.152"/>
+</kw>
+<kw name="Delete Package" library="AvocadoAutomation">
+<arg>${pos.osType}</arg>
+<arg>${pos.osName}</arg>
+<arg>${pos.osVersion}</arg>
+<status status="NOT RUN" starttime="20221021 12:57:04.152" endtime="20221021 12:57:04.153"/>
+</kw>
+<tag>orchestrator</tag>
+<tag>platformLinux</tag>
+<tag>rhel7</tag>
+<status status="FAIL" starttime="20221021 12:57:04.149" endtime="20221021 12:57:04.153">Resolving variable '${pos.osType}' failed: Variable '${pos}' not found. Did you mean:
+    ${APP_OS}</status>
+</test>
+<test id="s1-t11" name="Upload Plugin package ${pos.osType}#${pos.osName}#${pos.osVersion}">
+<kw name="Upload Plugin Package" library="orch-api-keywords">
+<kw name="Get Parallel Value For Key" library="pabot.PabotLib">
+<var>${BUILD_NO}</var>
+<arg>${pos.plugin_installer_dir}_build_num</arg>
+<doc>Get the value for a key. If there is no value for the key then empty
+string is returned.
+[https://pabot.org/PabotLib.html?ref=log#get-parallel-value-for-key|Open online docs.]</doc>
+<msg timestamp="20221021 12:57:04.163" level="FAIL">Resolving variable '${pos.plugin_installer_dir}' failed: Variable '${pos}' not found. Did you mean:
+    ${APP_OS}</msg>
+<status status="FAIL" starttime="20221021 12:57:04.161" endtime="20221021 12:57:04.163"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>Uploading plugin package # ${BUILD_NO}</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="NOT RUN" starttime="20221021 12:57:04.163" endtime="20221021 12:57:04.164"/>
+</kw>
+<kw name="Upload Package" library="AvocadoAutomation">
+<arg>${pos.osType}</arg>
+<arg>${pos.osName}</arg>
+<arg>${pos.osVersion}</arg>
+<arg>pluginpackage/${BUILD_NO}/${pos.plugin_installer_dir}</arg>
+<status status="NOT RUN" starttime="20221021 12:57:04.164" endtime="20221021 12:57:04.164"/>
+</kw>
+<status status="FAIL" starttime="20221021 12:57:04.160" endtime="20221021 12:57:04.164"/>
+</kw>
+<tag>orchestrator</tag>
+<tag>platformLinux</tag>
+<tag>rhel7</tag>
+<status status="FAIL" starttime="20221021 12:57:04.160" endtime="20221021 12:57:04.165">Resolving variable '${pos.plugin_installer_dir}' failed: Variable '${pos}' not found. Did you mean:
+    ${APP_OS}</status>
+</test>
+<test id="s1-t12" name="Push install plugin ${pos.osType}#${pos.osName}#${pos.osVersion} on [${ip}]">
+<kw name="Acquire Plugin" library="orch-api-keywords">
+<if>
+<branch type="IF" condition="'${plugin_ip}' != '${EMPTY}'">
+<kw name="Log" library="BuiltIn">
+<arg>Acquiring Lock On ${plugin_ip}</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="NOT RUN" starttime="20221021 12:57:04.173" endtime="20221021 12:57:04.173"/>
+</kw>
+<kw name="Acquire Lock" library="pabot.PabotLib">
+<arg>${plugin_ip}</arg>
+<doc>Wait for a lock with name.
+[https://pabot.org/PabotLib.html?ref=log#acquire-lock|Open online docs.]</doc>
+<status status="NOT RUN" starttime="20221021 12:57:04.173" endtime="20221021 12:57:04.174"/>
+</kw>
+<status status="NOT RUN" starttime="20221021 12:57:04.173" endtime="20221021 12:57:04.174"/>
+</branch>
+<branch type="ELSE">
+<kw name="Get Variable Value" library="BuiltIn">
+<var>${val}</var>
+<arg>${ip}</arg>
+<doc>Returns variable value or ``default`` if the variable does not exist.</doc>
+<msg timestamp="20221021 12:57:04.176" level="INFO">${val} = None</msg>
+<status status="PASS" starttime="20221021 12:57:04.174" endtime="20221021 12:57:04.176"/>
+</kw>
+<if>
+<branch type="IF" condition="'${val}' != 'None'">
+<kw name="Log" library="BuiltIn">
+<arg>Acquiring Lock On ${ip}</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="NOT RUN" starttime="20221021 12:57:04.176" endtime="20221021 12:57:04.176"/>
+</kw>
+<kw name="Acquire Lock" library="pabot.PabotLib">
+<arg>${ip}</arg>
+<doc>Wait for a lock with name.
+[https://pabot.org/PabotLib.html?ref=log#acquire-lock|Open online docs.]</doc>
+<status status="NOT RUN" starttime="20221021 12:57:04.176" endtime="20221021 12:57:04.177"/>
+</kw>
+<status status="NOT RUN" starttime="20221021 12:57:04.176" endtime="20221021 12:57:04.177"/>
+</branch>
+<branch type="ELSE">
+<kw name="Log" library="BuiltIn">
+<arg>"Plugin IP Not found"</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20221021 12:57:04.177" level="INFO">"Plugin IP Not found"</msg>
+<status status="PASS" starttime="20221021 12:57:04.177" endtime="20221021 12:57:04.177"/>
+</kw>
+<status status="PASS" starttime="20221021 12:57:04.177" endtime="20221021 12:57:04.177"/>
+</branch>
+<status status="PASS" starttime="20221021 12:57:04.176" endtime="20221021 12:57:04.177"/>
+</if>
+<status status="PASS" starttime="20221021 12:57:04.174" endtime="20221021 12:57:04.177"/>
+</branch>
+<status status="PASS" starttime="20221021 12:57:04.172" endtime="20221021 12:57:04.177"/>
+</if>
+<status status="PASS" starttime="20221021 12:57:04.171" endtime="20221021 12:57:04.177"/>
+</kw>
+<if>
+<branch type="IF" condition="'${pos.osName}' == 'RHEL'">
+<msg timestamp="20221021 12:57:04.180" level="FAIL">Resolving variable '${pos.osName}' failed: Variable '${pos}' not found. Did you mean:
+    ${APP_OS}</msg>
+<status status="FAIL" starttime="20221021 12:57:04.180" endtime="20221021 12:57:04.180"/>
+</branch>
+<status status="FAIL" starttime="20221021 12:57:04.178" endtime="20221021 12:57:04.180"/>
+</if>
+<kw name="Create Client Push Install With Exclusive Tenancy" library="AvocadoAutomation">
+<arg>${PREFIX}-${vm_name}</arg>
+<arg>True</arg>
+<arg>${plugin_domain}</arg>
+<arg>${plugin_subdom}</arg>
+<arg>True</arg>
+<arg>${pos.osType}</arg>
+<arg>${pos.osName}</arg>
+<arg>${pos.osVersion}</arg>
+<arg>${ip}</arg>
+<arg>${pos.avocado_user}</arg>
+<arg>${pos.avocado_pwd}</arg>
+<status status="NOT RUN" starttime="20221021 12:57:04.180" endtime="20221021 12:57:04.181"/>
+</kw>
+<kw name="Wait For Client Push To Finish" library="AvocadoAutomation">
+<var>${status}</var>
+<arg>${PREFIX}-${vm_name}</arg>
+<doc>Wait for push installation of plugin be repeatedly calling get_clients(), 
+Timeout by default in 4500 seconds, fails if push status is not Success even after timeout</doc>
+<status status="NOT RUN" starttime="20221021 12:57:04.181" endtime="20221021 12:57:04.181"/>
+</kw>
+<kw name="Enable Debug And Trace Log for ADPL amd AppMgr" library="orch-api-keywords">
+<status status="NOT RUN" starttime="20221021 12:57:04.181" endtime="20221021 12:57:04.181"/>
+</kw>
+<kw name="Release Lock" library="pabot.PabotLib">
+<arg>${pos.osType}#${pos.osName}#${pos.osVersion}</arg>
+<doc>Release a lock with name.
+[https://pabot.org/PabotLib.html?ref=log#release-lock|Open online docs.]</doc>
+<status status="NOT RUN" starttime="20221021 12:57:04.181" endtime="20221021 12:57:04.181"/>
+</kw>
+<kw name="Should Be True" library="BuiltIn">
+<arg>${status}</arg>
+<arg>msg=Plugin installation was not successful</arg>
+<doc>Fails if the given condition is not true.</doc>
+<status status="NOT RUN" starttime="20221021 12:57:04.182" endtime="20221021 12:57:04.182"/>
+</kw>
+<kw name="Whitelist All Python Applications" library="orch-api-keywords">
+<status status="NOT RUN" starttime="20221021 12:57:04.182" endtime="20221021 12:57:04.182"/>
+</kw>
+<kw name="Verify AppManager Is Running" library="orch-api-keywords">
+<arg>${plugin}</arg>
+<status status="NOT RUN" starttime="20221021 12:57:04.182" endtime="20221021 12:57:04.182"/>
+</kw>
+<kw name="Release Plugin" library="orch-api-keywords">
+<status status="NOT RUN" starttime="20221021 12:57:04.182" endtime="20221021 12:57:04.182"/>
+</kw>
+<tag>platformLinux</tag>
+<tag>rhel7</tag>
+<status status="FAIL" starttime="20221021 12:57:04.170" endtime="20221021 12:57:04.183">Resolving variable '${pos.osName}' failed: Variable '${pos}' not found. Did you mean:
+    ${APP_OS}</status>
+</test>
+<test id="s1-t13" name="Restart Application [tomcat] On Plugin [${ip}]">
+<kw name="Acquire Plugin" library="orch-api-keywords">
+<if>
+<branch type="IF" condition="'${plugin_ip}' != '${EMPTY}'">
+<kw name="Log" library="BuiltIn">
+<arg>Acquiring Lock On ${plugin_ip}</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="NOT RUN" starttime="20221021 12:57:04.186" endtime="20221021 12:57:04.186"/>
+</kw>
+<kw name="Acquire Lock" library="pabot.PabotLib">
+<arg>${plugin_ip}</arg>
+<doc>Wait for a lock with name.
+[https://pabot.org/PabotLib.html?ref=log#acquire-lock|Open online docs.]</doc>
+<status status="NOT RUN" starttime="20221021 12:57:04.186" endtime="20221021 12:57:04.186"/>
+</kw>
+<status status="NOT RUN" starttime="20221021 12:57:04.186" endtime="20221021 12:57:04.186"/>
+</branch>
+<branch type="ELSE">
+<kw name="Get Variable Value" library="BuiltIn">
+<var>${val}</var>
+<arg>${ip}</arg>
+<doc>Returns variable value or ``default`` if the variable does not exist.</doc>
+<msg timestamp="20221021 12:57:04.188" level="INFO">${val} = None</msg>
+<status status="PASS" starttime="20221021 12:57:04.187" endtime="20221021 12:57:04.188"/>
+</kw>
+<if>
+<branch type="IF" condition="'${val}' != 'None'">
+<kw name="Log" library="BuiltIn">
+<arg>Acquiring Lock On ${ip}</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="NOT RUN" starttime="20221021 12:57:04.188" endtime="20221021 12:57:04.189"/>
+</kw>
+<kw name="Acquire Lock" library="pabot.PabotLib">
+<arg>${ip}</arg>
+<doc>Wait for a lock with name.
+[https://pabot.org/PabotLib.html?ref=log#acquire-lock|Open online docs.]</doc>
+<status status="NOT RUN" starttime="20221021 12:57:04.189" endtime="20221021 12:57:04.189"/>
+</kw>
+<status status="NOT RUN" starttime="20221021 12:57:04.188" endtime="20221021 12:57:04.189"/>
+</branch>
+<branch type="ELSE">
+<kw name="Log" library="BuiltIn">
+<arg>"Plugin IP Not found"</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20221021 12:57:04.189" level="INFO">"Plugin IP Not found"</msg>
+<status status="PASS" starttime="20221021 12:57:04.189" endtime="20221021 12:57:04.189"/>
+</kw>
+<status status="PASS" starttime="20221021 12:57:04.189" endtime="20221021 12:57:04.189"/>
+</branch>
+<status status="PASS" starttime="20221021 12:57:04.188" endtime="20221021 12:57:04.189"/>
+</if>
+<status status="PASS" starttime="20221021 12:57:04.186" endtime="20221021 12:57:04.189"/>
+</branch>
+<status status="PASS" starttime="20221021 12:57:04.185" endtime="20221021 12:57:04.189"/>
+</if>
+<status status="PASS" starttime="20221021 12:57:04.185" endtime="20221021 12:57:04.190"/>
+</kw>
+<kw name="Restart Application On Plugin" library="orch-api-keywords">
+<arg>${plugin}</arg>
+<arg>${APP_NAME}</arg>
+<msg timestamp="20221021 12:57:04.191" level="FAIL">Variable '${plugin}' not found.</msg>
+<status status="FAIL" starttime="20221021 12:57:04.190" endtime="20221021 12:57:04.191"/>
+</kw>
+<kw name="Release Plugin" library="orch-api-keywords">
+<status status="NOT RUN" starttime="20221021 12:57:04.192" endtime="20221021 12:57:04.192"/>
+</kw>
+<tag>platformLinux</tag>
+<tag>rhel7</tag>
+<status status="FAIL" starttime="20221021 12:57:04.184" endtime="20221021 12:57:04.192">Variable '${plugin}' not found.</status>
+</test>
+<test id="s1-t14" name="Verify Discovery of Application [tomcat] on Plugin [${ip}]">
+<kw name="Acquire Plugin" library="orch-api-keywords">
+<if>
+<branch type="IF" condition="'${plugin_ip}' != '${EMPTY}'">
+<kw name="Log" library="BuiltIn">
+<arg>Acquiring Lock On ${plugin_ip}</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="NOT RUN" starttime="20221021 12:57:04.197" endtime="20221021 12:57:04.197"/>
+</kw>
+<kw name="Acquire Lock" library="pabot.PabotLib">
+<arg>${plugin_ip}</arg>
+<doc>Wait for a lock with name.
+[https://pabot.org/PabotLib.html?ref=log#acquire-lock|Open online docs.]</doc>
+<status status="NOT RUN" starttime="20221021 12:57:04.198" endtime="20221021 12:57:04.198"/>
+</kw>
+<status status="NOT RUN" starttime="20221021 12:57:04.197" endtime="20221021 12:57:04.198"/>
+</branch>
+<branch type="ELSE">
+<kw name="Get Variable Value" library="BuiltIn">
+<var>${val}</var>
+<arg>${ip}</arg>
+<doc>Returns variable value or ``default`` if the variable does not exist.</doc>
+<msg timestamp="20221021 12:57:04.199" level="INFO">${val} = None</msg>
+<status status="PASS" starttime="20221021 12:57:04.198" endtime="20221021 12:57:04.199"/>
+</kw>
+<if>
+<branch type="IF" condition="'${val}' != 'None'">
+<kw name="Log" library="BuiltIn">
+<arg>Acquiring Lock On ${ip}</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="NOT RUN" starttime="20221021 12:57:04.200" endtime="20221021 12:57:04.200"/>
+</kw>
+<kw name="Acquire Lock" library="pabot.PabotLib">
+<arg>${ip}</arg>
+<doc>Wait for a lock with name.
+[https://pabot.org/PabotLib.html?ref=log#acquire-lock|Open online docs.]</doc>
+<status status="NOT RUN" starttime="20221021 12:57:04.200" endtime="20221021 12:57:04.200"/>
+</kw>
+<status status="NOT RUN" starttime="20221021 12:57:04.200" endtime="20221021 12:57:04.200"/>
+</branch>
+<branch type="ELSE">
+<kw name="Log" library="BuiltIn">
+<arg>"Plugin IP Not found"</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20221021 12:57:04.200" level="INFO">"Plugin IP Not found"</msg>
+<status status="PASS" starttime="20221021 12:57:04.200" endtime="20221021 12:57:04.200"/>
+</kw>
+<status status="PASS" starttime="20221021 12:57:04.200" endtime="20221021 12:57:04.200"/>
+</branch>
+<status status="PASS" starttime="20221021 12:57:04.200" endtime="20221021 12:57:04.200"/>
+</if>
+<status status="PASS" starttime="20221021 12:57:04.198" endtime="20221021 12:57:04.200"/>
+</branch>
+<status status="PASS" starttime="20221021 12:57:04.196" endtime="20221021 12:57:04.200"/>
+</if>
+<status status="PASS" starttime="20221021 12:57:04.195" endtime="20221021 12:57:04.201"/>
+</kw>
+<kw name="Verify App Is Discovered On Host From Tenancy" library="AvocadoAutomation">
+<arg>${ip}</arg>
+<arg>${pos}[apps][${APP_NAME}][process_name]</arg>
+<arg>${plugin_domain}</arg>
+<arg>${plugin_subdom}</arg>
+<doc>Verifies if an application is discovered in given tenancy and on given host, 
+Fails if application if not found discovered</doc>
+<msg timestamp="20221021 12:57:04.202" level="FAIL">Variable '${ip}' not found.</msg>
+<status status="FAIL" starttime="20221021 12:57:04.201" endtime="20221021 12:57:04.202"/>
+</kw>
+<kw name="Release Plugin" library="orch-api-keywords">
+<status status="NOT RUN" starttime="20221021 12:57:04.202" endtime="20221021 12:57:04.202"/>
+</kw>
+<tag>platformLinux</tag>
+<tag>rhel7</tag>
+<status status="FAIL" starttime="20221021 12:57:04.194" endtime="20221021 12:57:04.202">Variable '${ip}' not found.</status>
+</test>
+<kw name="Release Locks" library="pabot.PabotLib" type="TEARDOWN">
+<doc>Release all locks called by instance.
+[https://pabot.org/PabotLib.html?ref=log#release-locks|Open online docs.]</doc>
+<status status="PASS" starttime="20221021 12:57:04.204" endtime="20221021 12:57:04.210"/>
+</kw>
+<meta name="Plugin OS">tomcat9_rhel7</meta>
+<meta name="PROXMOX">proxmox16</meta>
+<meta name="SuiteName">ASP Sanity Test Suite</meta>
+<status status="FAIL" starttime="20221021 12:51:07.121" endtime="20221021 12:57:04.210"/>
+</suite>
+<statistics>
+<total>
+<stat pass="1" fail="13" skip="0">All Tests</stat>
+</total>
+<tag>
+<stat pass="0" fail="3" skip="0">manual</stat>
+<stat pass="1" fail="10" skip="0">orchestrator</stat>
+<stat pass="0" fail="1" skip="0">platformAll</stat>
+<stat pass="1" fail="12" skip="0">platformLinux</stat>
+<stat pass="1" fail="13" skip="0">rhel7</stat>
+</tag>
+<suite>
+<stat pass="1" fail="13" skip="0" id="s1" name="Local-Test">Local-Test</stat>
+</suite>
+</statistics>
+<errors>
+</errors>
+</robot>

@@ -1,0 +1,106 @@
+Inside _start_suite
+{'osType': 'Linux', 'osName': 'RHEL', 'osVersion': '7', 'av_domain': 'tomcat', 'av_subdom': 'sub_tomcat', 'image': {'vm': 'base-tomcat9-rhel7', 'ct': 'dockerimage'}, 'plugin_cleanup_dir': 'rhel', 'plugin_installer_dir': 'centos7', 'apps': {'tomcat': {'process_name': 'java', 'processes': 2, 'systemd_service': 'tomcat9', 'proto': 'http', 'port': '8080', 'endpoint': '/', 'type': 'web', 'warriors': {'config': '/opt/tomcat/webapps/warriors/WEB-INF/database.properties', 'endpoint': '/warriors/login.jsp?txtusername=admin&txtpass=admin', 'uname': 'admin', 'pwd': 'admin'}, 'struts': {'config': '/opt/tomcat/webapps/strutsapp/WEB-INF/classes/database.properties'}}}, 'default_app': 'tomcat', 'ansible_user': 'avocado', 'ansible_ssh_private_key_file': '../env/ssh_keys/key-connect-to-proxmox16', 'avocado_user': 'root', 'avocado_pwd': 'Avocado@2020', 'ansible_ssh_extra_args': '-o UserKnownHostsFile=/dev/null'}
+Linux
+[orchestrator, platformAll]
+orchestrator
+platformAll
+[orchestrator, platformLinux]
+orchestrator
+platformLinux
+[orchestrator, platformLinux]
+orchestrator
+platformLinux
+[orchestrator, platformLinux]
+orchestrator
+platformLinux
+[orchestrator, platformLinux]
+orchestrator
+platformLinux
+[orchestrator, platformLinux]
+orchestrator
+platformLinux
+[manual, orchestrator, platformLinux]
+manual
+orchestrator
+platformLinux
+[manual, orchestrator, platformLinux]
+manual
+orchestrator
+platformLinux
+[manual, orchestrator, platformLinux]
+manual
+orchestrator
+platformLinux
+[orchestrator, platformLinux]
+orchestrator
+platformLinux
+[orchestrator, platformLinux]
+orchestrator
+platformLinux
+[platformLinux]
+platformLinux
+[platformLinux]
+platformLinux
+[platformLinux]
+platformLinux
+APP_NAME = tomcat
+[orchestrator, platformAll]
+[orchestrator, platformLinux]
+[orchestrator, platformLinux]
+[orchestrator, platformLinux]
+[orchestrator, platformLinux]
+[orchestrator, platformLinux]
+[manual, orchestrator, platformLinux]
+[manual, orchestrator, platformLinux]
+[manual, orchestrator, platformLinux]
+[orchestrator, platformLinux]
+[orchestrator, platformLinux]
+[platformLinux]
+[platformLinux]
+[platformLinux]
+app_os_str = tomcat9_rhel7
+tags here = [orchestrator, platformAll, rhel7]
+tags here = [orchestrator, platformLinux, rhel7]
+tags here = [orchestrator, platformLinux, rhel7]
+tags here = [orchestrator, platformLinux, rhel7]
+tags here = [orchestrator, platformLinux, rhel7]
+tags here = [orchestrator, platformLinux, rhel7]
+tags here = [manual, orchestrator, platformLinux, rhel7]
+tags here = [manual, orchestrator, platformLinux, rhel7]
+tags here = [manual, orchestrator, platformLinux, rhel7]
+tags here = [orchestrator, platformLinux, rhel7]
+tags here = [orchestrator, platformLinux, rhel7]
+tags here = [platformLinux, rhel7]
+tags here = [platformLinux, rhel7]
+tags here = [platformLinux, rhel7]
+Deploy VM on Proxmox on avcd-proxmox-16
+Playbook execution failed: 4 != 0
+Login to Orchestrator Via Api
+PASS
+Create And Verify Multiple Domains
+Variable '${plugin_domain}' not found.
+Create And Verify Multiple Sub Domains
+Variable '${plugin_subdom}' not found.
+Delete Domains and Subdomains
+Variable '${ip}' not found.
+Create Multiple Users, Login For First Time, Change Passwords and Verify Login using them, Delete users
+'Username belongs to another user.' does not contain 'User created successfully.'
+Manual Install With Protection Mode
+Variable '${plugin_domain}' not found.
+Verify Deletion Of Plugin From Orchestrator
+Variable '${plugin}' not found.
+Verify Uninstallation of plugin
+Variable '${plugin}' not found.
+Delete Plugin Package ${pos.osType}#${pos.osName}#${pos.osVersion}
+Resolving variable '${pos.osType}' failed: Variable '${pos}' not found. Did you mean:
+    ${APP_OS}
+Upload Plugin package ${pos.osType}#${pos.osName}#${pos.osVersion}
+Resolving variable '${pos.plugin_installer_dir}' failed: Variable '${pos}' not found. Did you mean:
+    ${APP_OS}
+Push install plugin ${pos.osType}#${pos.osName}#${pos.osVersion} on [${ip}]
+Resolving variable '${pos.osName}' failed: Variable '${pos}' not found. Did you mean:
+    ${APP_OS}
+Restart Application [tomcat] On Plugin [${ip}]
+Variable '${plugin}' not found.
+Verify Discovery of Application [tomcat] on Plugin [${ip}]
+Variable '${ip}' not found.

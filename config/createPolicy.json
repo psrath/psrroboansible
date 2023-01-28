@@ -1,0 +1,1 @@
+{"policyId":0,"policyName":"BasicPolicy","action":{"actionId":1,"actionName":"allow"},"subAction":{"subActionId":1,"subActionName":"mirror"},"app1":{"appId":2},"app2":{"appId":2},"app1IP":"0.0.0.0","app2IP":"0.0.0.0","app1Port":"0","app2Port":"0","direction":"bidirection","advance":false,"appFirstIpvSix":false,"appSecondIpvSix":false}

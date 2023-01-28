@@ -1,0 +1,1163 @@
+#ansible_user: avocado
+#ansible_ssh_private_key_file: ../env/ssh_keys/key-connect-to-proxmox15
+orch_ip: &orch_ip 192.168.100.186
+
+notification_details:
+  #connector_url: https://avocadosystemp.webhook.office.com/webhookb2/b232936e-af9b-4a32-a324-ca122cb34f38@c691407e-a04a-4176-85b5-cf12b5f63af5/IncomingWebhook/8a5ae6076ae44d97a6d09dcef7d64962/64712117-ac9c-4562-a14d-a946440cfa7a
+  connector_url: https://avocadosystemp.webhook.office.com/webhookb2/89c2f05e-8bfc-4f2f-a442-6750922869fe@c691407e-a04a-4176-85b5-cf12b5f63af5/IncomingWebhook/7675ed1a706342089354e127c72d53a4/64712117-ac9c-4562-a14d-a946440cfa7a
+  
+plugins_jenkins:
+  new:
+    url: http://192.168.102.220:8080/
+    user: admin
+    pwd: Avcd@2021
+    job: 
+      Release_2_5: adpl-2.5
+      Release_master: adpl-master
+    download_dir: pluginpackage
+    params: {'MAJOR_MINOR_VERSION': '2.5'}
+    artifacts:
+      - os: centos7
+        foldername: automation/compile/bin/centos7/pkgrepo/
+        packageExtn: rpm
+      - os: ol6
+        foldername: automation/compile/bin/ol6/pkgrepo/
+        packageExtn: rpm
+      - os: ubuntu16
+        foldername: automation/compile/bin/ubuntu16/pkgrepo/
+        packageExtn: deb
+      - os: ubuntu18
+        foldername: automation/compile/bin/ubuntu18/pkgrepo/
+        packageExtn: deb
+      - os: rhel8
+        foldername: automation/compile/bin/rhel8/pkgrepo/
+        packageExtn: rpm
+      - os: 
+        foldername: packager/
+        packageExtn: sh
+  ubuntu16:
+    url: http://192.168.100.23:8080/
+    user: admin
+    pwd: avcd@94539
+    job: 
+      Release_2_5: ADPL-2.5-Ubuntu16
+      Release_master: ADPL-2.5-Ubuntu16
+    download_dir: pluginpackage
+    params: {'MAJOR_MINOR_VERSION': '2.5'}
+    artifacts:
+      - os: ubuntu16
+        foldername: /
+        packageExtn: deb
+      - os:
+        foldername: /
+        packageExtn: sh
+  ubuntu18:
+    url: http://192.168.100.25:8080/
+    user: admin
+    pwd: avcd@94539
+    job: 
+      Release_2_5: ADPL-2.5-Ubuntu-18
+      Release_master: ADPL-2.5-Ubuntu-18
+    download_dir: pluginpackage
+    params: {'MAJOR_MINOR_VERSION': '2.5'}
+    artifacts:
+      - os: ubuntu18
+        foldername: /
+        packageExtn: deb
+      - os:
+        foldername: /
+        packageExtn: sh
+  rhel8:
+    url: http://192.168.100.29:8080/
+    user: admin
+    pwd: avcd@94539
+    job: 
+      Release_2_5: ADPL-2.5-RHEL8
+      Release_master: ADPL-2.5-RHEL8
+    download_dir: pluginpackage
+    params: {'MAJOR_MINOR_VERSION': '2.5'}
+    artifacts:
+      - os: rhel8
+        foldername: /
+        packageExtn: rpm
+      - os:
+        foldername: /
+        packageExtn: sh
+  centos7:
+    url: http://192.168.100.22:8080/
+    user: mbhalerao
+    pwd: Avocado@2020
+    job:
+      Release_2_5: ADPL-2.5-RHEL7
+      Release_master: adpl-master-build
+    download_dir: pluginpackage
+    params: {'MAJOR_MINOR_VERSION': '2.5'}
+    artifacts:
+      - os: centos7
+        foldername: /
+        packageExtn: rpm
+      - os:
+        foldername: /
+        packageExtn: sh
+
+orchestror_jenkins:
+  url: http://192.168.100.21:8080/
+  user: admin
+  pwd: avcd@94539
+  job:
+      Release_2_5: ORCH-2.5
+      Release_master: orch-master-uiv4
+  download_dir: build
+  params: {'MAJOR_MINOR_VERSION': '2.5'}
+  artifacts:
+    - os: centos7
+      foldername: builds/
+      packageExtn: sh
+    - os: centos7
+      foldername: builds/
+      packageExtn: tar
+
+orchestrator:
+  db_user: root
+  db_pwd: Secure@Av19
+  ansible_ssh_host: *orch_ip
+  ansible_ssh_pass: Avocado@2020
+  ansible_user: avocado
+  ansible_ssh_extra_args: -o UserKnownHostsFile=/dev/null
+
+ubuntu16:
+  osType: Linux
+  osName: Ubuntu
+  osVersion: '16.0'
+  image:
+    vm: vmimagename
+    ct: dockerimage
+  plugin_cleanup_dir: deb
+  plugin_installer_dir: ubuntu16
+
+centos84:
+  osType: Linux
+  osName: Centos
+  osVersion: '8.4'
+  image:
+    vm: template-centos84
+    ct: dockerimage
+  plugin_cleanup_dir: rhel8
+
+windows: &windows-common
+  osType: Windows
+  osName: 'Windows Server'
+  vm_prefix_length: 22
+  apps: &windows-apps-common
+    tomcat: &tomcat-common
+      proto: http
+      port: '9090'
+      endpoint: /
+      type: web
+      warriors:
+        config: C:\apps\apache-tomcat-8.5.70\webapps\warriors\WEB-INF\database.properties
+      struts:
+        config: C:\apps\apache-tomcat-8.5.70\webapps\strutsapp\WEB-INF\classes\database.properties
+    mysql: &mysql-common
+      process_name: mysql
+      processes: 1
+      type: mysql
+      db_user: squadtecadmin
+      db_pwd: Squ@dt3c!
+      port: '3306'
+      path_to_db: C:\apps\MySQL-Server-Sample-Database
+    mysqld: &mysqld-common
+      <<: *mysql-common
+      process_name: mysqld
+      type: mysqld
+    sqlserver:
+      process_name: sqlservr
+      service_name: MSSQLSERVER
+      processes: 1
+      type: sqlserver
+      db_user: sa
+      db_pwd: Squ@dt3c!
+      port: '1433'
+      path_to_db: C:\apps\SQL-Server-Sample-Database
+    heidisql:
+      process_name: heidisql
+      path_to_exe: "C:/Program Files (x86)/Common Files/MariaDBShared/HeidiSQL/heidisql.exe"
+    firefox:
+      process_name: firefox
+      path_to_exe: "C:/Program Files/Mozilla Firefox/firefox.exe"
+    chrome:
+      process_name: chrome
+      path_to_exe: "C:/Program Files/Google/Chrome/Application/chrome.exe"
+    edge:
+      process_name: msedge
+      path_to_exe: "C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe"
+    internet_explorer:
+      process_name: iexplore
+      path_to_exe: "C:/Program Files/Internet Explorer/iexplore.exe"
+    spring_boot:
+      process_name: java
+      path_to_exe: "C:/apps/SpringBootSQLServerApplication/bin/startup.bat"
+    mysqlsh:
+      process_name: mysqlsh
+      path_to_exe: "C:/Program Files/MySQL/MySQL Shell 8.0/bin/mysqlsh.exe"
+    powershell:
+      process_name: powershell
+      path_to_exe: "C:/Windows/System32/WindowsPowerShell/v1.0/powershell.exe"
+  default_app: tomcat
+  ansible_user: \squadtecadmin
+  ansible_password: Squ@dt3c!
+  ansible_connection: winrm
+  ansible_winrm_transport: ntlm
+  ansible_winrm_server_cert_validation: ignore
+  #ansible_winrm_operation_timeout_sec: 120
+  ansible_ssh_extra_args: -o UserKnownHostsFile=/dev/null
+
+w12s12t8:
+  <<: *windows-common
+  osVersion: '2012 R2 SERVERSTANDARD'
+  av_domain: w12s12t8
+  av_subdom: sub_w12s12t8
+  image:
+    vm: base-w12sql12t8
+  apps:
+    <<: *windows-apps-common
+    tomcat:
+      <<: *tomcat-common
+      process_name: Tomcat8
+      service_name: Tomcat8
+    mysql:
+      <<: *mysql-common
+      service_name: MySQL57
+    mysqld:
+      <<: *mysqld-common
+      service_name: MySQL57
+    ssms:
+      process_name: Ssms
+      path_to_exe: "C:/Program Files (x86)/Microsoft SQL Server/110/Tools/Binn/ManagementStudio/Ssms.exe"
+    work_bench:
+      process_name: MySQLWorkbench
+      path_to_exe: "C:/Program Files/MySQL/MySQL Workbench 8.0 CE/MySQLWorkbench.exe"
+    ms_profiler:
+      process_name: PROFILER
+      path_to_exe: "C:/Program Files (x86)/Microsoft SQL Server/110/Tools/Binn/PROFILER.EXE"
+
+w16s12t8:
+  <<: *windows-common
+  osVersion: '2016 SERVERSTANDARD'
+  av_domain: w16s12t8
+  av_subdom: sub_w16s12t8
+  image:
+    vm: base-w16sql12t8
+    #vm: pvsw16qasdc1-ST
+  apps:
+    <<: *windows-apps-common
+    tomcat:
+      <<: *tomcat-common
+      process_name: Tomcat8
+      service_name: Tomcat8
+    mysql:
+      <<: *mysql-common
+      service_name: MySQL57
+    mysqld:
+      <<: *mysqld-common
+      service_name: MySQL57
+    ssms:
+      process_name: Ssms
+      path_to_exe: "C:/Program Files (x86)/Microsoft SQL Server/110/Tools/Binn/ManagementStudio/Ssms.exe"
+    work_bench:
+      process_name: MySQLWorkbench
+      path_to_exe: "C:/Program Files/MySQL/MySQL Workbench 8.0 CE/MySQLWorkbench.exe"
+    ms_profiler:
+      process_name: PROFILER
+      path_to_exe: "C:/Program Files (x86)/Microsoft SQL Server/110/Tools/Binn/PROFILER.EXE"
+
+w12s16t9:
+  <<: *windows-common
+  osVersion: '2012 R2 SERVERSTANDARD'
+  av_domain: w12s16t9
+  av_subdom: sub_w12s16t9
+  image:
+    vm: base-w12sql16t9
+  apps:
+    <<: *windows-apps-common
+    tomcat:
+      <<: *tomcat-common
+      process_name: Tomcat9
+      service_name: Tomcat9
+      warriors:
+        config: C:\apps\apache-tomcat-9.0.56\webapps\warriors\WEB-INF\database.properties
+      struts:
+        config: C:\apps\apache-tomcat-9.0.56\webapps\strutsapp\WEB-INF\classes\database.properties
+    mysql:
+      <<: *mysql-common
+      service_name: MySQL80
+    mysqld:
+      <<: *mysqld-common
+      service_name: MySQL80
+    ssms:
+      process_name: Ssms
+      path_to_exe: "C:/Program Files (x86)/Microsoft SQL Server Management Studio 18/Common7/IDE/Ssms.exe"
+    work_bench:
+      process_name: MySQLWorkbench
+      path_to_exe: "C:/Program Files/MySQL/MySQL Workbench 8.0/MySQLWorkbench.exe"
+    ms_profiler:
+      process_name: PROFILER
+      path_to_exe: "C:/Program Files (x86)/Microsoft SQL Server Management Studio 18/Common7/PROFILER.EXE"
+
+w16s16t9:
+  <<: *windows-common
+  osVersion: '2016 SERVERSTANDARD'
+  av_domain: w16s16t9
+  av_subdom: sub_w16s16t9
+  image:
+    #vm: base-w16sql16t9 
+    vm: base-w16sql16t9F
+  apps:
+    <<: *windows-apps-common
+    tomcat:
+      <<: *tomcat-common
+      process_name: Tomcat9
+      service_name: Tomcat9
+      warriors:
+        config: C:\apps\apache-tomcat-9.0.56\webapps\warriors\WEB-INF\database.properties
+      struts:
+        config: C:\apps\apache-tomcat-9.0.56\webapps\strutsapp\WEB-INF\classes\database.properties
+    mysql:
+      <<: *mysql-common
+      service_name: MySQL80
+    mysqld:
+      <<: *mysqld-common
+      service_name: MySQL80
+    ssms:
+      process_name: Ssms
+      path_to_exe: "C:/Program Files (x86)/Microsoft SQL Server Management Studio 18/Common7/IDE/Ssms.exe"
+    work_bench:
+      process_name: MySQLWorkbench
+      path_to_exe: "C:/Program Files/MySQL/MySQL Workbench 8.0/MySQLWorkbench.exe"
+    ms_profiler:
+      process_name: PROFILER
+      path_to_exe: "C:/Program Files (x86)/Microsoft SQL Server Management Studio 18/Common7/PROFILER.EXE"
+
+w19s17t9:
+  <<: *windows-common
+  osVersion: '2019 DATACENTER'
+  av_domain: w19s17t9
+  av_subdom: sub_w19s17t9
+  image:
+    vm: base-w19sql17t9
+  apps:
+    <<: *windows-apps-common
+    tomcat:
+      <<: *tomcat-common
+      process_name: Tomcat9
+      service_name: Tomcat9
+      warriors:
+        config: C:\apps\apache-tomcat-9.0.56\webapps\warriors\WEB-INF\database.properties
+      struts:
+        config: C:\apps\apache-tomcat-9.0.56\webapps\strutsapp\WEB-INF\classes\database.properties
+    mysql:
+      <<: *mysql-common
+      service_name: MySQL80
+    mysqld:
+      <<: *mysqld-common
+      service_name: MySQL80
+    ssms:
+      process_name: Ssms
+      path_to_exe: "E:/Program Files (x86)/Microsoft SQL Server Management Studio 18/Common7/IDE/Ssms.exe"
+    work_bench:
+      process_name: MySQLWorkbench
+      path_to_exe: "C:/Program Files/MySQL/MySQL Workbench 8.0/MySQLWorkbench.exe"
+    ms_profiler:
+      process_name: PROFILER
+      path_to_exe: "E:/Program Files (x86)/Microsoft SQL Server Management Studio 18/Common7/PROFILER.EXE"
+
+tomcat9_centos84:
+  osType: Linux
+  osName: Centos
+  osVersion: '8.4'
+  image:
+    vm: template-tomcat9-centos84
+    ct: dockerimage
+  plugin_cleanup_dir: rhel8
+  apps:
+    - java
+  ansible_user: avocado
+  ansible_ssh_private_key_file: ../env/ssh_keys/key-connect-to-proxmox15
+  ansible_ssh_extra_args: -o UserKnownHostsFile=/dev/null
+  avocado_user: root
+  avocado_pwd: Avocado@2020
+
+tomcat8_rhel84:
+  osType: Linux
+  osName: RHEL
+  osVersion: '8'
+  av_domain: tomcat
+  av_subdom: sub_tomcat
+  image:
+    vm: base-tomcat8-rhel84
+    ct: dockerimage
+  plugin_cleanup_dir: rhel8
+  plugin_installer_dir: rhel8
+  apps:
+      tomcat:
+        process_name: java
+        processes: 2
+        systemd_service: tomcat
+        proto: http
+        port:  '8080'
+        endpoint: /
+        type: web
+        warriors:
+          config: /opt/tomcat/webapps/warriors/WEB-INF/database.properties
+          endpoint: /warriors/login.jsp?txtusername=admin&txtpass=admin
+          uname: admin
+          pwd: admin
+        struts:
+          config: /opt/tomcat/webapps/strutsapp/WEB-INF/classes/database.properties
+  default_app: tomcat
+  ansible_user: avocado
+  ansible_ssh_private_key_file: ../env/ssh_keys/key-connect-to-proxmox16
+  avocado_user: root
+  avocado_pwd: Avocado@2020
+  ansible_ssh_extra_args: -o UserKnownHostsFile=/dev/null
+
+tomcat8_rhel86:
+  osType: Linux
+  osName: RHEL
+  osVersion: '8'
+  av_domain: tomcat
+  av_subdom: sub_tomcat
+  image:
+    vm: base-tomcat8-rhel86
+    ct: dockerimage
+  plugin_cleanup_dir: rhel8
+  plugin_installer_dir: rhel8
+  apps:
+      tomcat:
+        process_name: java
+        processes: 2
+        systemd_service: tomcat
+        proto: http
+        port:  '8080'
+        endpoint: /
+        type: web
+        warriors:
+          config: /opt/tomcat/webapps/warriors/WEB-INF/database.properties
+          endpoint: /warriors/login.jsp?txtusername=admin&txtpass=admin
+          uname: admin
+          pwd: admin
+        struts:
+          config: /opt/tomcat/webapps/strutsapp/WEB-INF/classes/database.properties
+  default_app: tomcat
+  ansible_user: avocado
+  ansible_ssh_private_key_file: ../env/ssh_keys/key-connect-to-proxmox16
+  avocado_user: root
+  avocado_pwd: Avocado@2020
+  ansible_ssh_extra_args: -o UserKnownHostsFile=/dev/null
+
+
+all_rhel86:
+  osType: Linux
+  osName: RHEL
+  osVersion: '8'
+  av_domain: all
+  av_subdom: sub_all
+  image:
+    vm: base-all-rhel86
+    ct: dockerimage
+  plugin_cleanup_dir: rhel8
+  plugin_installer_dir: rhel8
+  apps:
+      tomcat:
+        process_name: java
+        processes: 2
+        systemd_service: tomcat
+        proto: http
+        port:  '8080'
+        endpoint: /
+        type: web
+        warriors:
+          config: /opt/tomcat/webapps/warriors/WEB-INF/database.properties
+          endpoint: /warriors/login.jsp?txtusername=admin&txtpass=admin
+          uname: admin
+          pwd: admin
+        struts:
+          config: /opt/tomcat/webapps/strutsapp/WEB-INF/classes/database.properties
+        mysql:
+          process_name: mysql
+          processes: 1
+          type: mysql
+        mysqld:
+          systemd_service: mysqld
+          process_name: mysqld
+          processes: 1
+          type: mysqld
+          db_user: root
+          db_pwd: Root_123
+  default_app: tomcat
+  ansible_user: avocado
+  ansible_ssh_private_key_file: ../env/ssh_keys/key-connect-to-proxmox16
+  avocado_user: root
+  avocado_pwd: Avocado@2020
+  ansible_ssh_extra_args: -o UserKnownHostsFile=/dev/null
+
+orch_rhel84:
+  osType: Linux
+  osName: RHEL
+  osVersion: '8'
+  image:
+    vm: base-rh8-orch
+    ct: dockerimage
+  default_app: none
+  plugin_cleanup_dir: rhel8
+  plugin_installer_dir: rhel8
+  ansible_user: avocado
+  ansible_ssh_private_key_file: ../env/ssh_keys/key-connect-to-proxmox16
+  avocado_user: root
+  avocado_pwd: Avocado@2020
+  ansible_ssh_extra_args: -o UserKnownHostsFile=/dev/null
+  apps:
+    tomcat:
+      process_name: none
+
+orch_co7:
+  osType: Linux
+  osName: Centos
+  osVersion: '7'
+  image:
+    vm: base-co7-orch
+    ct: dockerimage
+  default_app: none
+  plugin_cleanup_dir: centos7
+  plugin_installer_dir: centos7
+  ansible_user: avocado
+  ansible_ssh_private_key_file: ../env/ssh_keys/key-connect-to-proxmox16
+  avocado_user: root
+  avocado_pwd: Avocado@2020
+  ansible_ssh_extra_args: -o UserKnownHostsFile=/dev/null
+  apps:
+    tomcat:
+      process_name: none
+
+orch_ol7:
+  osType: Linux
+  osName: Oracle Linux
+  osVersion: '7'
+  image:
+    vm: base-ol7-orch
+    ct: dockerimage
+  default_app: none
+  plugin_cleanup_dir: ol7
+  plugin_installer_dir: ol7
+  ansible_user: avocado
+  ansible_ssh_private_key_file: ../env/ssh_keys/key-connect-to-proxmox16
+  avocado_user: root
+  avocado_pwd: Avocado@2020
+  ansible_ssh_extra_args: -o UserKnownHostsFile=/dev/null
+  apps:
+    tomcat:
+      process_name: none
+
+tomcat9_rhel7:
+  osType: Linux
+  osName: RHEL
+  osVersion: '7'
+  av_domain: tomcat
+  av_subdom: sub_tomcat
+  image:
+    vm: base-tomcat9-rhel7
+    ct: dockerimage
+  plugin_cleanup_dir: rhel
+  plugin_installer_dir: centos7
+  apps:
+      tomcat:
+        process_name: java
+        processes: 2
+        systemd_service: tomcat9
+        proto: http
+        port:  '8080'
+        endpoint: /
+        type: web
+        warriors:
+          config: /opt/tomcat/webapps/warriors/WEB-INF/database.properties
+          endpoint: /warriors/login.jsp?txtusername=admin&txtpass=admin
+          uname: admin
+          pwd: admin
+        struts:
+          config: /opt/tomcat/webapps/strutsapp/WEB-INF/classes/database.properties
+  default_app: tomcat
+  ansible_user: avocado
+  ansible_ssh_private_key_file: ../env/ssh_keys/key-connect-to-proxmox16
+  avocado_user: root
+  avocado_pwd: Avocado@2020
+  ansible_ssh_extra_args: -o UserKnownHostsFile=/dev/null
+
+tomcat8_ol7:
+  osType: Linux
+  osName: Oracle Linux
+  osVersion: '7'
+  av_domain: tomcat
+  av_subdom: sub_tomcat
+  image:
+    vm: base-tomcat8-ol7
+    ct: dockerimage
+  plugin_cleanup_dir: rhel
+  plugin_installer_dir: centos7
+  apps:
+      tomcat:
+        process_name: java
+        processes: 2
+        systemd_service: tomcat
+        proto: http
+        port:  '8080'
+        endpoint: /
+        type: web
+        warriors:
+          config: /opt/tomcat/webapps/warriors/WEB-INF/database.properties
+          endpoint: /warriors/login.jsp?txtusername=admin&txtpass=admin
+          uname: admin
+          pwd: admin
+        struts:
+          config: /opt/tomcat/webapps/strutsapp/WEB-INF/classes/database.properties
+  default_app: tomcat
+  ansible_user: avocado
+  ansible_ssh_private_key_file: ../env/ssh_keys/key-connect-to-proxmox16
+  avocado_user: root
+  avocado_pwd: Avocado@2020
+  ansible_ssh_extra_args: -o UserKnownHostsFile=/dev/null
+
+tomcat8_ubuntu16:
+  osType: Linux
+  osName: Ubuntu
+  osVersion: '16'
+  av_domain: tomcat
+  av_subdom: sub_tomcat
+  image:
+    vm: base-tomcat8-ubuntu16
+    ct: dockerimage
+  plugin_cleanup_dir: deb
+  plugin_installer_dir: ubuntu16
+  apps:
+      tomcat:
+        process_name: java
+        processes: 2
+        systemd_service: tomcat
+        proto: http
+        port:  '8080'
+        endpoint: /
+        type: web
+        warriors:
+          config: /opt/tomcat/webapps/warriors/WEB-INF/database.properties
+          endpoint: /warriors/login.jsp?txtusername=admin&txtpass=admin
+          uname: admin
+          pwd: admin
+        struts:
+          config: /opt/tomcat/webapps/strutsapp/WEB-INF/classes/database.properties
+  default_app: tomcat
+  ansible_user: avocado
+  ansible_ssh_private_key_file: ../env/ssh_keys/key-connect-to-proxmox16
+  avocado_user: root
+  avocado_pwd: Avocado@2020
+  ansible_ssh_extra_args: -o UserKnownHostsFile=/dev/null
+
+tomcat9_centos7:
+  osType: Linux
+  osName: Centos
+  osVersion: '7'
+  av_domain: tomcat
+  av_subdom: sub_tomcat
+  image:
+    vm: base-tomcat9-centos7
+    ct: dockerimage
+  plugin_cleanup_dir: rhel
+  plugin_installer_dir: centos7
+  apps:
+      tomcat:
+        process_name: java
+        processes: 2
+        systemd_service: tomcat
+        proto: http
+        port:  '8080'
+        endpoint: /
+        type: web
+        warriors:
+          config: /opt/tomcat/apache-tomcat-9.0.58/webapps/warriors/WEB-INF/database.properties
+          endpoint: /warriors/login.jsp?txtusername=admin&txtpass=admin
+          uname: admin
+          pwd: admin
+        struts:
+          config: /opt/tomcat/apache-tomcat-9.0.58/webapps/strutsapp/WEB-INF/classes/database.properties
+  default_app: tomcat
+  ansible_user: avocado
+  ansible_ssh_private_key_file: ../env/ssh_keys/key-connect-to-proxmox16
+  avocado_user: root
+  avocado_pwd: Avocado@2020
+  ansible_ssh_extra_args: -o UserKnownHostsFile=/dev/null
+
+tomcat9_ubuntu18:
+  osType: Linux
+  osName: Ubuntu
+  osVersion: '18'
+  av_domain: tomcat
+  av_subdom: sub_tomcat
+  image:
+    vm: base-tomcat9-ubuntu18
+    ct: dockerimage
+  plugin_cleanup_dir: deb
+  plugin_installer_dir: ubuntu18
+  apps:
+      tomcat:
+        process_name: java
+        processes: 2
+        systemd_service: tomcat
+        proto: http
+        port:  '8080'
+        endpoint: /
+        type: web
+        warriors:
+          config: /opt/tomcat/webapps/warriors/WEB-INF/database.properties
+          endpoint: /warriors/login.jsp?txtusername=admin&txtpass=admin
+          uname: admin
+          pwd: admin
+        struts:
+          config: /opt/tomcat/webapps/strutsapp/WEB-INF/classes/database.properties
+  default_app: tomcat
+  ansible_user: avocado
+  ansible_ssh_private_key_file: ../env/ssh_keys/key-connect-to-proxmox16
+  avocado_user: root
+  avocado_pwd: Avocado@2020
+  ansible_ssh_extra_args: -o UserKnownHostsFile=/dev/null
+
+mysql8_centos7:
+  osType: Linux
+  osName: Centos
+  osVersion: '7'
+  av_domain: mysql
+  av_subdom: sub_mysql
+  image:
+    vm: base-mysql8-centos7
+    ct: dockerimage
+  plugin_cleanup_dir: rhel
+  plugin_installer_dir: centos7
+  apps:
+      mysql:
+        process_name: mysql
+        processes: 1
+        type: mysql
+      mysqld:
+        systemd_service: mysqld
+        process_name: mysqld
+        processes: 1
+        type: mysqld
+        db_user: root
+        db_pwd: Avocado@2020
+  default_app: mysqld
+  ansible_user: avocado
+  ansible_ssh_private_key_file: ../env/ssh_keys/key-connect-to-proxmox16
+  avocado_user: root
+  avocado_pwd: Avocado@2020
+  ansible_ssh_extra_args: -o UserKnownHostsFile=/dev/null
+
+mysql8_rhel84:
+  osType: Linux
+  osName: RHEL
+  osVersion: '8'
+  av_domain: mysql
+  av_subdom: sub_mysql
+  image:
+    vm: base-mysql8-rhel84
+    ct: dockerimage
+  plugin_cleanup_dir: rhel8
+  plugin_installer_dir: rhel8
+  apps:
+      mysql:
+        process_name: mysql
+        processes: 1
+        type: mysql
+      mysqld:
+        systemd_service: mysqld
+        process_name: mysqld
+        processes: 1
+        type: mysqld
+        db_user: root
+        db_pwd: Root_123
+  default_app: mysqld
+  ansible_user: avocado
+  ansible_ssh_private_key_file: ../env/ssh_keys/key-connect-to-proxmox16
+  avocado_user: root
+  avocado_pwd: Avocado@2020
+  ansible_ssh_extra_args: -o UserKnownHostsFile=/dev/null
+
+mysql8_rhel86:
+  osType: Linux
+  osName: RHEL
+  osVersion: '8'
+  av_domain: mysql
+  av_subdom: sub_mysql
+  image:
+    vm: base-mysql8-rhel86
+    ct: dockerimage
+  plugin_cleanup_dir: rhel8
+  plugin_installer_dir: rhel8
+  apps:
+      mysql:
+        process_name: mysql
+        processes: 1
+        type: mysql
+      mysqld:
+        systemd_service: mysqld
+        process_name: mysqld
+        processes: 1
+        type: mysqld
+        db_user: root
+        db_pwd: Root_123
+  default_app: mysqld
+  ansible_user: avocado
+  ansible_ssh_private_key_file: ../env/ssh_keys/key-connect-to-proxmox16
+  avocado_user: root
+  avocado_pwd: Avocado@2020
+  ansible_ssh_extra_args: -o UserKnownHostsFile=/dev/null
+
+mysql6_rhel7:
+  osType: Linux
+  osName: RHEL
+  osVersion: '7'
+  av_domain: mysql
+  av_subdom: sub_mysql
+  image:
+    vm: base-mysql6-rhel7
+    ct: dockerimage
+  plugin_cleanup_dir: rhel
+  plugin_installer_dir: centos7
+  apps:
+      mysql:
+        process_name: mysql
+        processes: 1
+        type: mysql
+      mysqld:
+        systemd_service: mysqld
+        process_name: mysqld
+        processes: 1
+        type: mysqld
+        db_user: root
+        db_pwd: Root_123
+  default_app: mysqld
+  ansible_user: avocado
+  ansible_ssh_private_key_file: ../env/ssh_keys/key-connect-to-proxmox16
+  avocado_user: root
+  avocado_pwd: Avocado@2020
+  ansible_ssh_extra_args: -o UserKnownHostsFile=/dev/null
+
+mysql6_ol7:
+  osType: Linux
+  osName: Oracle Linux
+  osVersion: '7'
+  av_domain: mysql
+  av_subdom: sub_mysql
+  image:
+    vm: base-mysql6-ol7
+    ct: dockerimage
+  plugin_cleanup_dir: rhel
+  plugin_installer_dir: centos7
+  apps:
+      mysql:
+        process_name: mysql
+        processes: 1
+        type: mysql
+      mysqld:
+        systemd_service: mysqld
+        process_name: mysqld
+        processes: 1
+        type: mysqld
+        db_user: root
+        db_pwd: Root_123
+  default_app: mysqld
+  ansible_user: avocado
+  ansible_ssh_private_key_file: ../env/ssh_keys/key-connect-to-proxmox16
+  avocado_user: root
+  avocado_pwd: Avocado@2020
+  ansible_ssh_extra_args: -o UserKnownHostsFile=/dev/null
+
+all_ubuntu18:
+  osType: Linux
+  osName: Ubuntu
+  osVersion: '18'
+  av_domain: all
+  av_subdom: sub_all
+  image:
+    vm: base-all-ubuntu18
+    ct: dockerimage
+  plugin_cleanup_dir: deb
+  plugin_installer_dir: ubuntu18
+  apps:
+      mysql:
+        process_name: mysql
+        processes: 1
+        type: mysql
+      mysqld:
+        systemd_service: mysql
+        process_name: mysqld
+        processes: 1
+        type: mysqld
+        db_user: root
+        db_pwd: Avocado@2020
+      tomcat:
+        process_name: java
+        processes: 2
+        systemd_service: tomcat
+        proto: http
+        port:  '8080'
+        endpoint: /
+        type: web
+        warriors:
+          config: /opt/tomcat/webapps/warriors/WEB-INF/database.properties
+          endpoint: /warriors/login.jsp?txtusername=admin&txtpass=admin
+          uname: admin
+          pwd: admin
+        struts:
+          config: /opt/tomcat/webapps/strutsapp/WEB-INF/classes/database.properties
+  default_app: mysqld
+  ansible_user: avocado
+  ansible_ssh_private_key_file: ../env/ssh_keys/key-connect-to-proxmox16
+  avocado_user: root
+  avocado_pwd: Avocado@2020
+  ansible_ssh_extra_args: -o UserKnownHostsFile=/dev/null
+
+mysql8_ubuntu18:
+  osType: Linux
+  osName: Ubuntu
+  osVersion: '18'
+  av_domain: mysql
+  av_subdom: sub_mysql
+  image:
+    vm: base-mysql8-ubuntu18
+    ct: dockerimage
+  plugin_cleanup_dir: deb
+  plugin_installer_dir: ubuntu18
+  apps:
+      mysql:
+        process_name: mysql
+        processes: 1
+        type: mysql
+      mysqld:
+        systemd_service: mysql
+        process_name: mysqld
+        processes: 1
+        type: mysqld
+        db_user: root
+        db_pwd: Avocado@2020
+  default_app: mysqld
+  ansible_user: avocado
+  ansible_ssh_private_key_file: ../env/ssh_keys/key-connect-to-proxmox16
+  avocado_user: root
+  avocado_pwd: Avocado@2020
+  ansible_ssh_extra_args: -o UserKnownHostsFile=/dev/null
+
+mysql8_ubuntu16:
+  osType: Linux
+  osName: Ubuntu
+  osVersion: '16'
+  av_domain: mysql
+  av_subdom: sub_mysql
+  image:
+    vm: base-mysql8-ubuntu16
+    ct: dockerimage
+  plugin_cleanup_dir: deb
+  plugin_installer_dir: ubuntu16
+  apps:
+      mysql:
+        process_name: mysql
+        processes: 1
+        type: mysql
+      mysqld:
+        systemd_service: mysql
+        process_name: mysqld
+        processes: 1
+        type: mysqld
+        db_user: root
+        db_pwd: Root_123
+  default_app: mysqld
+  ansible_user: avocado
+  ansible_ssh_private_key_file: ../env/ssh_keys/key-connect-to-proxmox16
+  avocado_user: root
+  avocado_pwd: Avocado@2020
+  ansible_ssh_extra_args: -o UserKnownHostsFile=/dev/null
+
+proxmox15:
+  host: &host15 192.168.100.15
+  ansible_user: root
+  ansible_ssh_pass: Avcd@95135
+  ansible_ssh_host: *host15
+  api_user: root@pam
+  pve_password: Avcd@95135
+  pve_node: pve-02
+  default_proxmox_node: pve-02
+  vm_ip: static
+  vm_ips: 
+      - 192.168.100.149
+  ipconfig:
+    params:
+      netmask: 24
+      vmbr: 0
+      gateway: 192.168.100.254
+      dnsservers: 8.8.8.8
+
+proxmox16:
+  host: &host16 192.168.101.16
+  ansible_user: root
+  ansible_ssh_pass: avcd@95135
+  ansible_ssh_host: *host16
+  api_user: root@pam
+  pve_password: avcd@95135
+  pve_node: &node avcd-proxmox-16
+  default_proxmox_node: *node
+  vm_ip: static
+  vm_ips:
+    - 192.168.102.201
+    - 192.168.102.202
+    - 192.168.102.203
+    - 192.168.102.204
+    - 192.168.102.205
+    - 192.168.102.206
+    - 192.168.102.207
+    - 192.168.102.208
+    - 192.168.102.209
+    - 192.168.102.210
+    - 192.168.102.211
+    - 192.168.102.212
+    - 192.168.102.213
+    - 192.168.102.214
+  vm_ips_windows:
+    - 192.168.102.232
+    - 192.168.102.233
+    - 192.168.102.234
+    - 192.168.102.235
+  ipconfig:
+    params:
+      netmask: 22
+      vmbr: 0
+      gateway: 192.168.100.254
+      dnsservers: 8.8.8.8
+      win_domain_controller_ip: 192.168.102.229
+
+proxmox20:
+  host: &host20 192.168.101.20
+  ansible_user: root
+  ansible_ssh_pass: avcd@95135
+  ansible_ssh_host: *host20
+  api_user: root@pam
+  pve_password: avcd@95135
+  pve_node: &node20 pve-20
+  default_proxmox_node: *node20
+  vm_ip: static
+  vm_ips:
+    - 192.168.102.201
+    - 192.168.102.202
+    - 192.168.102.203
+    - 192.168.102.204
+    - 192.168.102.205
+    - 192.168.102.206
+    - 192.168.102.207
+    - 192.168.102.208
+    - 192.168.102.209
+    - 192.168.102.210
+    - 192.168.102.211
+    - 192.168.102.212
+    - 192.168.102.213
+    - 192.168.102.214
+  vm_ips_windows:
+    - 192.168.102.232
+    - 192.168.102.233
+    - 192.168.102.234
+    - 192.168.102.235
+  ipconfig:
+    params:
+      netmask: 22
+      vmbr: 0
+      gateway: 192.168.100.254
+      dnsservers: 8.8.8.8
+      win_domain_controller_ip: 192.168.102.229
+
+apps:
+  tomcat: "tomcat9_centos84"
+
+inv:
+  all:
+    children:
+      ungrouped:
+        hosts:
+
+dockerhost:
+    192.168.100.153:
+      ansible_ssh_host: 192.168.100.153
+      ansible_user: avocado
+      ansible_ssh_private_key_file: ../env/ssh_keys/key-connect-to-proxmox15
+      ansible_ssh_extra_args: -o UserKnownHostsFile=/dev/null
+
+sanity:
+  domains:
+    - mysql
+    - tomcat
+  subdomains:
+    - sub_mysql
+    - sub_tomcat
+
+PCREFiles:
+  - rules/REQUEST-941-APPLICATION-ATTACK-XSS.conf
+  - rules/REQUEST-942-APPLICATION-ATTACK-SQLI.conf
+  - rules/custom-XSS.conf
+
+external_mysql:
+  unsecured_db_host: 192.168.100.139
+  unsecured_db_pwd: Avocado@2020
+  unsecured_db_user: root
+  sleep_interval: 5
+
+testenv:
+  sanity:
+    orch_ips:
+      - 192.168.102.221
+    vm_ips:
+      - 192.168.102.201
+      - 192.168.102.202
+      - 192.168.102.203
+      - 192.168.102.204
+      - 192.168.102.205
+      - 192.168.102.206
+      - 192.168.102.207
+      - 192.168.102.208
+      - 192.168.102.209
+      - 192.168.102.210
+      - 192.168.102.211
+      - 192.168.102.212
+      - 192.168.102.213
+      - 192.168.102.214
+      - 192.168.102.215
+      - 192.168.102.216
+      - 192.168.102.217
+      - 192.168.102.218
+      - 192.168.102.219
+  demo:
+    vm_ips:
+      - 192.168.102.191
+      - 192.168.102.192
+      - 192.168.102.193
+      - 192.168.102.194
+      - 192.168.102.195
+      - 192.168.102.196
+      - 192.168.102.197
+      - 192.168.102.198
+      - 192.168.102.199
+      - 192.168.102.200
+  test:
+    vm_ips:
+      - 192.168.102.173
+  manoj:
+    orch_ips:
+      - 192.168.102.221
+    vm_ips:
+      - 192.168.102.209
+  psr:
+    vm_ips:
+      - 192.168.102.173
+  

@@ -1,0 +1,83 @@
+{
+  "type":"message",
+  "attachments":[
+     {
+        "contentType":"application/vnd.microsoft.card.adaptive",
+        "contentUrl":null,
+        "content":{
+           "$schema":"http://adaptivecards.io/schemas/adaptive-card.json",
+           "type":"AdaptiveCard",
+           "version":"1.4",
+           "body": [
+            {
+                "type": "Container",
+                "items": [
+                    {
+                        "type": "FactSet",
+                        "facts": [
+                            {
+                                "title": "Orchestrtor Build",
+                                "value": "2.4.SP2"
+                            },
+                            {
+                                "title": "Plugin Build",
+                                "value": "2.5.18"
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "type": "ColumnSet",
+                "columns": [
+                    {
+                        "type": "Column",
+                        "width": "stretch",
+                        "items": [
+                            {
+                                "type": "TextBlock",
+                                "wrap": true,
+                                "text": "Plugin OS"
+                            }
+                        ]
+                    },
+                    {
+                        "type": "Column",
+                        "width": "stretch",
+                        "items": [
+                            {
+                                "type": "TextBlock",
+                                "wrap": true,
+                                "text": "Passed"
+                            }
+                        ]
+                    },
+                    {
+                        "type": "Column",
+                        "width": "stretch",
+                        "items": [
+                            {
+                                "type": "TextBlock",
+                                "text": "Failed",
+                                "wrap": true
+                            }
+                        ]
+                    },
+                    {
+                      "type": "Column",
+                      "width": "stretch",
+                      "items": [
+                          {
+                              "type": "TextBlock",
+                              "text": "Skipped",
+                              "wrap": true
+                          }
+                      ]
+                    }
+                ]
+            }
+         ]
+        }
+     }
+  ]
+}

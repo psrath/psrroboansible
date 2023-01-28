@@ -1,0 +1,2 @@
+--variable PROXMOX:proxmox20
+--variable APP_OS:w16s12t8
